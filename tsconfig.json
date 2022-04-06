@@ -1,0 +1,17 @@
+{
+    "include": [
+        "src/**/*",
+        "bin.js",
+    ],
+    "compilerOptions": {
+        "outDir": "out",
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "lib": [
+            "ESNext"
+        ]
+    }
+}

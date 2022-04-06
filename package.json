@@ -1,0 +1,32 @@
+{
+  "name": "cedar",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": "bin.js",
+  "keywords": [],
+  "author": "Binyamin Aron Green (https://binyam.in/)",
+  "license": "MIT",
+  "scripts": {
+    "run:serve": "DEBUG='cedar:*' node bin.js serve test",
+    "run:build": "DEBUG='cedar:*' node bin.js test",
+    "lint": "xo bin.js src/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "commander": "^9.1.0",
+    "nunjucks": "^3.2.3",
+    "rollup": "^2.70.1",
+    "serve-handler": "^6.1.3",
+    "tiny-lr": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.26",
+    "ava": "^4.1.0",
+    "debug": "^4.3.4",
+    "typescript": "^4.6.3",
+    "xo": "^0.48.0"
+  }
+}
