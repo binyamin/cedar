@@ -1,3 +1,3 @@
 # To-Do
 - [ ] Write tests (with `ava`)
-- [ ] Fix linting errors (from `xo`)
+- [x] Fix linting errors (from `xo`)
