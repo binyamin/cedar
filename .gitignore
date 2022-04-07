@@ -1,2 +1,6 @@
+.vscode/
+out/
+
+# NPM & Friends
 node_modules/
 pnpm-lock.yaml
