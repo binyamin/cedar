@@ -23,10 +23,7 @@
     "tiny-lr": "^2.0.0"
   },
   "devDependencies": {
-    "@types/node": "^16.11.26",
-    "ava": "^4.1.0",
     "debug": "^4.3.4",
-    "typescript": "^4.6.3",
     "xo": "^0.48.0"
   }
 }
