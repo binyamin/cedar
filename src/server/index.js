@@ -10,9 +10,10 @@ import Reloader from './reloader.js';
  * @param {object} config
  * @param {string} config.dir
  * @param {number} [config.port=3000]
+ * @param {({ path: string, file: string }) => void} [changed]
  * @returns {Promise<void>}
  */
-async function serve(config) {
+async function serve(config, changed) {
 	const s = new Server({ dir: config.dir });
 	const t = new Reloader();
 
@@ -26,7 +27,7 @@ async function serve(config) {
 
 	watcher.on('change', (fpath, _fstats) => {
 		const p = '/' + path.relative(config.dir, fpath);
-		debug('changed - %o', p);
+		if (changed) changed({ path: p, file: fpath });
 		t.reload(p);
 	});
 }

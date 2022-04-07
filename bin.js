@@ -1,11 +1,12 @@
 import { program } from 'commander';
+import debug from 'debug';
 
 import { serve, build } from './src/index.js';
 
-// prettier-ignore
 program
 	.name('cedar')
-	.version('0.1.0', '-v, --version');
+	.version('0.1.0', '-v, --version')
+	.option('-d, --debug', 'print debugging information', false);
 
 program
 	.command('build <input>', {
@@ -33,8 +34,12 @@ program
 	.description('server the given folder')
 	.option('-p, --port <number>', 'Port number', 3000)
 	.action(async (input, options, _cmd) => {
-		console.log(`Serving "./${input}" on port ${options.port}...`);
+		console.log(`Serving "${input}" on port ${options.port}...`);
 		await serve({ dir: input, port: options.port });
 	});
 
 program.parse();
+
+if (program.optsWithGlobals().debug) {
+	debug.enable('cedar:*');
+}
