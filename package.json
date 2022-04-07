@@ -9,8 +9,8 @@
   "author": "Binyamin Aron Green (https://binyam.in/)",
   "license": "MIT",
   "scripts": {
-    "run:serve": "DEBUG='cedar:*' node bin.js serve test",
-    "run:build": "DEBUG='cedar:*' node bin.js test",
+    "run:serve": "node bin.js serve test",
+    "run:build": "node bin.js test",
     "lint": "xo bin.js src/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
