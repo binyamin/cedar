@@ -14,20 +14,22 @@ class Engine extends nunjucks.Environment {
 
 /**
  *
- * @param {import("../build/runner.js").runner.Options} config
+ * @param {import("../build/plugin").Options} config
  * @param {{}} _options
  * @returns
  */
 function plugin(config, _options) {
 	const engine = new Engine({ dirs: config.src });
 
-	return function (file) {
-		if (file.path.endsWith('.njk')) {
+	return {
+		name: 'nunjucks',
+		extensions: ['.njk'],
+		exec(file) {
 			file.destination = file.destination.replace(/\.njk$/, '.html');
 			file.contents = engine.renderString(file.contents, {});
-		}
 
-		return file;
+			return file;
+		},
 	};
 }
 

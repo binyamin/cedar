@@ -3,7 +3,12 @@ export interface Options {
 	dest: string;
 }
 
-export type PluginMain = (file: File) => File;
+export interface PluginMain {
+	name: string;
+	extensions: string[];
+	exec(file: File): File | Promise<File>;
+}
+
 export type Plugin = (
 	config: Options,
 	options?: Record<string, unknown>,
