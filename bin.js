@@ -1,7 +1,37 @@
+import path from 'node:path';
 import { program } from 'commander';
 import debug from 'debug';
 
-import { serve, build } from './src/index.js';
+import { serve, runner, plugins } from './src/index.js';
+
+/**
+ *
+ * @param {object} config
+ * @param {string} config.src
+ * @param {string} config.dest
+ */
+function build(config) {
+	function process(paths) {
+		return runner({
+			src: config.src,
+			dest: config.dest,
+		})
+			.use(plugins.nunjucks)
+			.process(paths);
+	}
+
+	/**
+	 *
+	 * @param {string | string[]} [paths] Only render the files at
+	 * these paths. (default: undefined)
+	 * @returns {string} The output path
+	 */
+	return async (paths) => {
+		const result = paths ? await process(paths) : await process();
+		await result.write();
+		return result.files[0].destination;
+	};
+}
 
 program
 	.name('cedar')
@@ -25,7 +55,7 @@ program
 		await build({
 			src: input,
 			dest: options.output,
-		});
+		})();
 		console.timeEnd('build');
 	});
 
@@ -33,9 +63,25 @@ program
 	.command('serve <input>')
 	.description('server the given folder')
 	.option('-p, --port <number>', 'Port number', 3000)
+	.option('-o, --output <path>', 'Define the output directory', 'out')
 	.action(async (input, options, _cmd) => {
 		console.log(`Serving "${input}" on port ${options.port}...`);
-		await serve({ dir: input, port: options.port });
+
+		const builder = build({
+			src: input,
+			dest: options.output,
+		});
+
+		await serve(
+			{
+				src: input,
+				dest: options.output,
+				port: options.port,
+			},
+			async (filepath) => {
+				return path.relative(options.output, await builder(filepath));
+			},
+		);
 	});
 
 program.parse();

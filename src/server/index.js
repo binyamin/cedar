@@ -11,34 +11,40 @@ const debug = createDebug('watcher');
 /**
  *
  * @param {object} config
- * @param {string} config.dir
+ * @param {string} config.src
+ * @param {string} [config.dest] If using a build step,
+ * this should point to the output.
  * @param {number} [config.port=3000]
- * @param {(path: string) => void | Promise<void>} [changed]
+ * @param {(path: string) => string | Promise<string>} [changed]
  * A function to run each time there's a file changed. Most
  * likely, you'll want some sort of build function here.
+ * Returns the output path
  *
  * @returns {Promise<void>}
  */
 async function serve(config, changed) {
-	const s = new Server({ dir: config.dir });
+	const s = new Server({ dir: config.dest ?? config.src });
 	const t = new Reloader();
 
 	await s.listen(config.port);
 	await t.listen();
 
-	const watcher = filewatch(config.dir);
+	const watcher = filewatch(config.src);
 	debug('running');
 
 	watcher.on('change', async (fpath, _fstats) => {
-		const relativePath = path.relative(config.dir, fpath);
-		debug('Changed - /%s', relativePath);
+		const relativePath = path.relative(config.src, fpath);
+		debug('Changed - %s', relativePath);
 
+		let outputPath = relativePath;
 		if (changed) {
 			const value = changed(fpath);
-			if (isPromise(value)) await value;
+			outputPath = isPromise(value) ? await value : value;
 		}
 
-		t.reload('/' + relativePath);
+		if (!outputPath.startsWith('/')) outputPath = '/' + outputPath;
+
+		t.reload(outputPath);
 	});
 }
 

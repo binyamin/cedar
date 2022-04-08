@@ -1,20 +1,8 @@
-import runner from './build/runner.js';
-import njk from './plugins/nunjucks.js';
-
-/**
- *
- * @param {object} config
- * @param {string} config.src
- * @param {string} config.dest
- */
-async function build(config) {
-	await runner({
-		src: config.src,
-		dest: config.dest,
-	})
-		.use(njk, {})
-		.process();
-}
+import nunjucks from './plugins/nunjucks.js';
 
 export { default as serve } from './server/index.js';
-export { build };
+export { default as runner } from './build/runner.js';
+
+export const plugins = {
+	nunjucks,
+};

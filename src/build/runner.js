@@ -10,7 +10,22 @@ const debug = createDebug('runner');
 /**
  * @typedef {import("./plugin.js").Options} Options
  * @typedef {import("./plugin.js").Plugin} Plugin
+ * @typedef {import('./file.js').File} File
  */
+
+/**
+ *
+ * @param {File[]} files
+ */
+async function write(files) {
+	const results = [];
+
+	for (const file of files) {
+		results.push(writeFile(file.destination, file.contents, 'utf-8'));
+	}
+
+	await Promise.all(results);
+}
 
 class Runner {
 	/**
@@ -22,6 +37,11 @@ class Runner {
 	 * @type {Plugin[]}
 	 */
 	#plugins = [];
+
+	/**
+	 * @type {File[]}
+	 */
+	#files = [];
 
 	constructor(options) {
 		// Config object is now read-only. This is to prevent
@@ -48,16 +68,25 @@ class Runner {
 		return this;
 	}
 
-	async process() {
-		const filepaths = await walk(this.#config.src);
+	async process(paths) {
+		if (paths) {
+			if (Array.isArray(paths)) {
+				this.#files = await Promise.all(paths.map((p) => createFile(p)));
+			} else {
+				this.#files = [await createFile(paths)];
+			}
+		} else {
+			const filepaths = await walk(this.#config.src);
 
-		const files = await Promise.all(
-			filepaths.map((file) => createFile(path.join(this.#config.src, file))),
-		);
+			this.#files = await Promise.all(
+				filepaths.map((file) => createFile(path.join(this.#config.src, file))),
+			);
+		}
 
-		const results = [];
-		for (let file of files) {
-			file.destination = path.join(
+		// Note: Because we're using `const file` and not `let file`, we get
+		// a reference to the array item itself.
+		for (const file of this.#files) {
+			file.destination ??= path.join(
 				this.#config.dest,
 				path.relative(this.#config.src, file.path),
 			);
@@ -74,14 +103,17 @@ class Runner {
 					});
 
 					/* eslint-disable-next-line no-await-in-loop */
-					file = isPromise(value) ? await value : value;
+					Object.assign(file, isPromise(value) ? await value : value);
+					// Note: because we're using `const file` above, we need to
+					// we can't overwrite `file` directly. This is a workaround.
 				}
 			}
-
-			results.push(writeFile(file.destination, file.contents, 'utf-8'));
 		}
 
-		await Promise.all(results);
+		return {
+			files: this.#files,
+			write: () => write(this.#files),
+		};
 	}
 }
 
