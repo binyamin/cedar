@@ -70,7 +70,5 @@ export interface Plugin {
 	 *
 	 * @todo support returning an array of files (eg, for sourcemaps).
 	 */
-	onFile(
-		context: Plugin.Context & { file: Readonly<File> },
-	): File | Promise<File>;
+	onFile(context: Plugin.Context & { file: File }): File | Promise<File>;
 }
