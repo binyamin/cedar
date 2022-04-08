@@ -1,45 +1,50 @@
-import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { isPromise } from 'node:util/types';
 
 import { walk, writeFile } from '../utils/fs.js';
 import { createDebug } from '../utils/log.js';
+import { createFile } from './file.js';
 
 const debug = createDebug('runner');
 
 /**
- *
- * @param {string} path
- * @returns {Promise<import('./plugin.js').File>}
+ * @typedef {import("./plugin.js").Options} Options
+ * @typedef {import("./plugin.js").Plugin} Plugin
  */
-async function createFile(path) {
-	return {
-		path,
-		contents: await fs.readFile(path, 'utf-8'),
-		destination: undefined,
-	};
-}
 
 class Runner {
-	/** @type {import('./plugin.js').Options} */
+	/**
+	 * @type {Readonly<Options>}
+	 */
 	#config;
 
-	/** @type {import('./plugin.js').PluginMain[]} */
+	/**
+	 * @type {Plugin[]}
+	 */
 	#plugins = [];
 
 	constructor(options) {
-		this.#config = options;
+		// Config object is now read-only. This is to prevent
+		// the user from modifying it in-transit.
+		this.#config = Object.freeze(options);
 	}
 
 	/**
 	 *
-	 * @param {import('./plugin.js').Plugin} plugin
-	 * @param {{}} options
+	 * @param {Plugin | (options: Record<string, any>) => Plugin} plugin
+	 * @param {Record<string, any>} [options]
 	 * @returns {this}
 	 */
-	use(plugin, options) {
-		const p = plugin(this.#config, options ?? {});
+	use(plugin, options = {}) {
+		const p = typeof plugin === 'function' ? plugin(options) : plugin;
+
+		p.state = {};
+		p.init({
+			global: this.#config,
+			state: p.state,
+		});
 		this.#plugins.push(p);
+
 		return this;
 	}
 
@@ -60,7 +65,14 @@ class Runner {
 			for (const plugin of this.#plugins) {
 				if (plugin.extensions.some((value) => file.path.endsWith(value))) {
 					debug('running plugin:%s', plugin.name);
-					const value = plugin.exec(file);
+
+					const value = plugin.onFile({
+						global: this.#config,
+						state: plugin.state,
+						// Prevent user from modifying original object, using `Object.assign`
+						file: Object.assign({}, file),
+					});
+
 					/* eslint-disable-next-line no-await-in-loop */
 					file = isPromise(value) ? await value : value;
 				}

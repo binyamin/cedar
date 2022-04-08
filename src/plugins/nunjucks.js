@@ -13,20 +13,29 @@ class Engine extends nunjucks.Environment {
 }
 
 /**
- *
- * @param {import("../build/plugin").Options} config
- * @param {{}} _options
- * @returns
+ * @param {import("./nunjucks").nunjucks.Options} options
+ * @returns {import('../build/plugin').Plugin}
  */
-function plugin(config, _options) {
-	const engine = new Engine({ dirs: config.src });
+function plugin(options) {
+	options.extensions ??= ['.njk'];
 
 	return {
 		name: 'nunjucks',
-		extensions: ['.njk'],
-		exec(file) {
-			file.destination = file.destination.replace(/\.njk$/, '.html');
-			file.contents = engine.renderString(file.contents, {});
+		extensions: options.extensions,
+		init(context) {
+			context.state.engine = new Engine({
+				dirs: context.global.src,
+			});
+		},
+		onFile({ file, ...context }) {
+			file.contents = context.state.engine.renderString(file.contents, {});
+
+			const ext = options.extensions
+				.filter((ext) => file.destination.endsWith(ext))
+				.sort((a, b) => a.length - b.length)[0];
+
+			file.destination = file.destination.replace(new RegExp(ext + '$'), '');
+			if (!file.destination.includes('.')) file.destination += '.html';
 
 			return file;
 		},
