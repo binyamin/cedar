@@ -14,19 +14,12 @@ const debug = createDebug('watcher');
  * @param {string} config.dir
  * @param {number} [config.port=3000]
  * @param {(path: string) => void | Promise<void>} [changed]
+ * A function to run each time there's a file changed. Most
+ * likely, you'll want some sort of build function here.
  *
  * @returns {Promise<void>}
  */
-async function serve(
-	config,
-	/**
-	 *
-	 * A function to run each time there's a file changed.
-	 * Most likely, you'll want some sort of build function
-	 * here.
-	 */
-	changed,
-) {
+async function serve(config, changed) {
 	const s = new Server({ dir: config.dir });
 	const t = new Reloader();
 
@@ -38,10 +31,10 @@ async function serve(
 
 	watcher.on('change', async (fpath, _fstats) => {
 		const relativePath = path.relative(config.dir, fpath);
-		debug('Changed - %s', relativePath);
+		debug('Changed - /%s', relativePath);
 
 		if (changed) {
-			const value = changed(relativePath);
+			const value = changed(fpath);
 			if (isPromise(value)) await value;
 		}
 
