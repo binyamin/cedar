@@ -12,7 +12,7 @@ async function build(config) {
 		src: config.src,
 		dest: config.dest,
 	})
-		.use(njk)
+		.use(njk, {})
 		.process();
 }
 

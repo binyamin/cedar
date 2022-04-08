@@ -37,29 +37,41 @@ declare namespace nunjucks {
 		extensions?: string[];
 
 		/**
-		 * @todo
 		 *
 		 * Resolve input file extensions to output extensions.
 		 *
 		 * @see {@link extensions}
+		 *
+		 * @todo
 		 */
 
 		outExtension?: (ext: string) => string;
 
 		/**
-		 * @todo
-		 *
 		 * Custom filters for nunjucks
 		 *
 		 * @default undefined
+		 *
+		 * @todo
 		 */
 		filters?: Record<string, Filter>;
 
 		/**
+		 *
+		 * Global data to share between templates.
+		 *
+		 * @default undefined;
+		 *
 		 * @todo
+		 */
+		data?: Record<string, any>;
+
+		/**
 		 *
 		 * Configure nunjucks. Only a subset of the
 		 * original options is available.
+		 *
+		 * @todo
 		 */
 		envOptions?: {
 			[K in keyof EnvOptions]: EnvOptions[K];
@@ -72,8 +84,8 @@ export class Engine extends Environment {
 }
 
 /**
+ *
  * Compile nunjucks templates.
- * @param options
  */
 declare function nunjucks(options: nunjucks.Options): Plugin;
 
