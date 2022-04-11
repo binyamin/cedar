@@ -1,5 +1,5 @@
 import { ConfigureOptions, Environment } from 'nunjucks';
-import type { Plugin } from '../build/plugin.js';
+import type { plugin } from '@cedar/runner';
 
 declare namespace nunjucks {
 	type Filter = (
@@ -87,6 +87,6 @@ export class Engine extends Environment {
  *
  * Compile nunjucks templates.
  */
-declare function nunjucks(options: nunjucks.Options): Plugin;
+declare function nunjucks(options: nunjucks.Options): plugin;
 
 export default nunjucks;

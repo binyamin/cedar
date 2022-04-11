@@ -13,8 +13,8 @@ class Engine extends nunjucks.Environment {
 }
 
 /**
- * @param {import("./nunjucks")} options
- * @returns {import('../../src/build/plugin').Plugin}
+ * @param {import("./nunjucks").default.Options} options
+ * @returns {import('@cedar/runner').plugin}
  */
 function plugin(options) {
 	options.extensions ??= ['.njk'];
