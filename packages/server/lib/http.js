@@ -1,10 +1,8 @@
 import http from 'node:http';
+
 import handler from 'serve-handler';
-import { createDebug } from '../utils/log.js';
 
-const debug = createDebug('http');
-
-class Server {
+class FileServer {
 	#server;
 	#dir;
 
@@ -21,8 +19,6 @@ class Server {
 				public: this.#dir,
 			}),
 		);
-
-		debug('loaded');
 	}
 
 	/**
@@ -34,7 +30,6 @@ class Server {
 	listen(port = 3000) {
 		return new Promise((resolve) => {
 			this.#server.listen(port, () => {
-				debug('running');
 				resolve();
 			});
 		});
@@ -56,7 +51,6 @@ class Server {
 	 */
 	close() {
 		return new Promise((resolve, reject) => {
-			debug('exiting');
 			this.#server.close((error) => {
 				if (error) {
 					reject(error);
@@ -68,4 +62,4 @@ class Server {
 	}
 }
 
-export default Server;
+export default FileServer;

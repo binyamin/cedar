@@ -1,37 +1,8 @@
-import path from 'node:path';
+import Server from '@cedar/server';
 import { program } from 'commander';
 import debug from 'debug';
 
-import { serve, runner, plugins } from './src/index.js';
-
-/**
- *
- * @param {object} config
- * @param {string} config.src
- * @param {string} config.dest
- */
-function build(config) {
-	function process(paths) {
-		return runner({
-			src: config.src,
-			dest: config.dest,
-		})
-			.use(plugins.nunjucks)
-			.process(paths);
-	}
-
-	/**
-	 *
-	 * @param {string | string[]} [paths] Only render the files at
-	 * these paths. (default: undefined)
-	 * @returns {string} The output path
-	 */
-	return async (paths) => {
-		const result = paths ? await process(paths) : await process();
-		await result.write();
-		return result.files[0].destination;
-	};
-}
+import { builder } from './helpers.js';
 
 program
 	.name('cedar')
@@ -50,12 +21,14 @@ program
 			options.output = options.output.slice(1);
 		}
 
-		console.log(`Building ${input} => ${options.output}`);
-		console.time('build');
-		await build({
+		const build = builder({
 			src: input,
 			dest: options.output,
-		})();
+		});
+
+		console.log(`Building ${input} => ${options.output}`);
+		console.time('build');
+		await build();
 		console.timeEnd('build');
 	});
 
@@ -67,21 +40,28 @@ program
 	.action(async (input, options, _cmd) => {
 		console.log(`Serving "${input}" on port ${options.port}...`);
 
-		const builder = build({
+		const build = builder({
 			src: input,
 			dest: options.output,
 		});
 
-		await serve(
-			{
-				src: input,
-				dest: options.output,
-				port: options.port,
-			},
-			async (filepath) => {
-				return path.relative(options.output, await builder(filepath));
-			},
-		);
+		const server = new Server({
+			publicDir: options.output,
+			watchDir: input,
+			port: options.port,
+		});
+
+		server.on('change', async (filepath) => {
+			// TODO If possible, reuse previous line for
+			// this `console.error`
+			console.error('File changed - %s', filepath);
+
+			const f = await build(filepath);
+			filepath = f[0].destination;
+			server.reload(filepath);
+		});
+
+		await server.start();
 	});
 
 program.parse();

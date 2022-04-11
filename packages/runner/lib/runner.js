@@ -1,8 +1,8 @@
 import path from 'node:path';
 import { isPromise } from 'node:util/types';
 
-import { walk, writeFile } from '../utils/fs.js';
-import { createDebug } from '../utils/log.js';
+import { walk, writeFile } from './utils/fs.js';
+import { createDebug } from './utils/log.js';
 import { createFile } from './file.js';
 
 const debug = createDebug('runner');

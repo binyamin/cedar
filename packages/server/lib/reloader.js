@@ -1,9 +1,7 @@
 import tinylr from 'tiny-lr';
-import { createDebug } from '../utils/log.js';
-
-const debug = createDebug('reloader');
 
 /**
+ *
  * Live-reload server. Wrapper for `tiny-lr`.
  */
 class Reloader {
@@ -11,7 +9,6 @@ class Reloader {
 
 	constructor() {
 		this.#server = tinylr();
-		debug('loaded');
 	}
 
 	/**
@@ -20,7 +17,6 @@ class Reloader {
 	 */
 	listen() {
 		this.#server.listen();
-		debug('running');
 	}
 
 	get server() {
@@ -33,7 +29,6 @@ class Reloader {
 	 * @param {string|string[]} paths path(s) to reload
 	 */
 	reload(paths) {
-		debug('reloading');
 		this.#server.changed({
 			body: {
 				files: Array.isArray(paths) ? paths : [paths],
@@ -48,7 +43,6 @@ class Reloader {
 	 */
 	close() {
 		return new Promise((resolve, reject) => {
-			debug('exiting');
 			this.#server.close((error) => {
 				if (error) {
 					reject(error);

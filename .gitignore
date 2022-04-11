@@ -1,6 +1,15 @@
 .vscode/
 out/
+test/
 
-# NPM & Friends
+## NPM & Friends ##
 node_modules/
-pnpm-lock.yaml
+
+# Yarn #
+pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+# !.yarn/releases
+# !.yarn/sdks
+!.yarn/versions
