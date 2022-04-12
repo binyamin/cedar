@@ -37,6 +37,17 @@ declare namespace nunjucks {
 		extensions?: string[];
 
 		/**
+		 * List of files to read, but not write. This is
+		 * useful for partials. Glob-patterns are supported.
+		 * The value is relative to `config.src`.
+		 *
+		 * The default glob pattern ignores all files which
+		 * begin with an underscore and end with one of
+		 * {@link Options.extensions `options.extensions`}.
+		 */
+		ignored?: string[];
+
+		/**
 		 *
 		 * Resolve input file extensions to output extensions.
 		 *

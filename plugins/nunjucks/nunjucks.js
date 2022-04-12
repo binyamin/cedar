@@ -1,3 +1,6 @@
+import path from 'node:path';
+
+import { globby } from 'globby';
 import nunjucks from 'nunjucks';
 
 class Engine extends nunjucks.Environment {
@@ -18,6 +21,7 @@ class Engine extends nunjucks.Environment {
  */
 function plugin(options) {
 	options.extensions ??= ['.njk'];
+	options.ignored ??= options.extensions.map((ext) => `**/_*${ext}`);
 
 	return {
 		name: 'nunjucks',
@@ -26,9 +30,27 @@ function plugin(options) {
 			context.state.engine = new Engine({
 				dirs: context.global.src,
 			});
+
+			globby(options.ignored, {
+				cwd: context.global.src,
+			}).then((value) => {
+				context.state.ignored = value;
+			});
 		},
 		onFile({ file, ...context }) {
-			file.contents = context.state.engine.renderString(file.contents, {});
+			const isPartial = context.state.ignored.includes(
+				path.relative(context.global.src, file.path),
+			);
+
+			if (isPartial) {
+				file.destination = false;
+				return file;
+			}
+
+			/** @type {Engine} */
+			const engine = context.state.engine;
+
+			file.contents = engine.renderString(file.contents, {});
 
 			const ext = options.extensions
 				.filter((ext) => file.destination.endsWith(ext))
