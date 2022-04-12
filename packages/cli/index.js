@@ -59,9 +59,16 @@ program
 		console.log(
 			`Building ${config?.src || input} => ${config?.dest || output}`,
 		);
-		console.time('build');
-		await build();
-		console.timeEnd('build');
+		console.time('Time');
+
+		const stats = await build();
+
+		// Build stats
+		console.group('Done');
+		console.timeEnd('Time');
+		console.log('Read: %f files', stats.length);
+		console.log('Wrote: %f files', stats.filter((f) => f.destination).length);
+		console.groupEnd();
 	});
 
 program
