@@ -1,7 +1,6 @@
 {
   "name": "@cedar/plugin-nunjucks",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "main": "nunjucks.js",
   "types": "./nunjucks.d.ts",
