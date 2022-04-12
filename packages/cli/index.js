@@ -30,7 +30,6 @@ program
 
 			return value;
 		},
-		'cedar.config.js',
 	);
 
 program.hook('preAction', async (_cmd, _action) => {

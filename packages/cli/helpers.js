@@ -31,11 +31,33 @@ function builder(config) {
 	};
 }
 
+/**
+ * Utility function, so we can easily look for multiple filenames
+ */
+async function tryLoad(...files) {
+	for (let file of files) {
+		file = path.resolve(file);
+
+		try {
+			/* eslint-disable-next-line no-await-in-loop */
+			const config = await import(file);
+			return config.default ?? config;
+		} catch (error) {
+			if (error.code === 'ERR_MODULE_NOT_FOUND') {
+				continue;
+			}
+
+			throw new Error(error);
+		}
+	}
+}
+
 async function loadConfig(file) {
-	file = file ? file : 'cedar.config.js';
-	file = path.resolve(file);
-	const config = await import(file);
-	return config.default ?? config;
+	if (file) {
+		return tryLoad(file);
+	}
+
+	return tryLoad('cedar.config.js', 'cedar.config.mjs', 'cedar.config.cjs');
 }
 
 export { builder, loadConfig };
