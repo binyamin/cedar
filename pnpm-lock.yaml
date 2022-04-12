@@ -13,11 +13,13 @@ importers:
   packages/cli:
     specifiers:
       '@cedar/plugin-nunjucks': workspace:^0.1.0
+      '@cedar/plugin-postcss': workspace:^0.1.0
       '@cedar/runner': workspace:^0.1.0
       '@cedar/server': workspace:^0.1.0
       commander: ^9.1.0
     dependencies:
       '@cedar/plugin-nunjucks': link:../../plugins/nunjucks
+      '@cedar/plugin-postcss': link:../../plugins/postcss
       '@cedar/runner': link:../runner
       '@cedar/server': link:../server
       commander: 9.1.0
