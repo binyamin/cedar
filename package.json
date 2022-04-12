@@ -10,8 +10,7 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "xo packages/ plugins/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "xo packages/ plugins/"
   },
   "devDependencies": {
     "debug": "^4.3.4",
