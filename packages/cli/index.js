@@ -2,12 +2,45 @@ import Server from '@cedar/server';
 import { program } from 'commander';
 import debug from 'debug';
 
-import { builder } from './helpers.js';
+import { builder, loadConfig } from './helpers.js';
 
 program
 	.name('cedar')
 	.version('0.1.0', '-v, --version')
-	.option('-d, --debug', 'print debugging information', false);
+	.option('-d, --debug', 'print debugging information', false)
+	.option(
+		'-o, --output <path>',
+		'Define the output directory',
+		(value) => {
+			if (value[0] === '=') {
+				value = value.slice(1);
+			}
+
+			return value;
+		},
+		'out',
+	)
+	.option(
+		'-c, --config <path>',
+		'Specify the path to a config file',
+		(value) => {
+			if (value[0] === '=') {
+				value = value.slice(1);
+			}
+
+			return value;
+		},
+		'cedar.config.js',
+	);
+
+program.hook('preAction', async (_cmd, _action) => {
+	if (program.getOptionValue('debug')) debug.enable('cedar:*');
+
+	program.setOptionValue(
+		'config',
+		await loadConfig(program.getOptionValue('config')),
+	);
+});
 
 program
 	.command('build <input>', {
@@ -15,18 +48,16 @@ program
 		hidden: true,
 	})
 	.description('Build the site')
-	.option('-o, --output <path>', 'Define the output directory', 'out')
-	.action(async (input, options, _cmd) => {
-		if (options.output[0] === '=') {
-			options.output = options.output.slice(1);
-		}
+	.action(async (input, _options, _cmd) => {
+		const { output, config } = program.optsWithGlobals();
+		const build = builder(
+			config || {
+				src: input,
+				dest: output,
+			},
+		);
 
-		const build = builder({
-			src: input,
-			dest: options.output,
-		});
-
-		console.log(`Building ${input} => ${options.output}`);
+		console.log(`Building ${input} => ${output}`);
 		console.time('build');
 		await build();
 		console.timeEnd('build');
@@ -36,17 +67,19 @@ program
 	.command('serve <input>')
 	.description('server the given folder')
 	.option('-p, --port <number>', 'Port number', 3000)
-	.option('-o, --output <path>', 'Define the output directory', 'out')
 	.action(async (input, options, _cmd) => {
+		const { output, config } = program.optsWithGlobals();
 		console.log(`Serving "${input}" on port ${options.port}...`);
 
-		const build = builder({
-			src: input,
-			dest: options.output,
-		});
+		const build = builder(
+			config || {
+				src: input,
+				dest: output,
+			},
+		);
 
 		const server = new Server({
-			publicDir: options.output,
+			publicDir: output,
 			watchDir: input,
 			port: options.port,
 		});
@@ -65,7 +98,3 @@ program
 	});
 
 program.parse();
-
-if (program.optsWithGlobals().debug) {
-	debug.enable('cedar:*');
-}

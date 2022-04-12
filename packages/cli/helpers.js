@@ -1,30 +1,29 @@
-import runner from '@cedar/runner';
+import path from 'node:path';
+
+import createRunner from '@cedar/runner';
 import nunjucksPlugin from '@cedar/plugin-nunjucks';
 import postcssPlugin from '@cedar/plugin-postcss';
 
 /**
  *
- * @param {object} config
- * @param {string} config.src
- * @param {string} config.dest
+ * @param {import("./helpers").Config} config
  */
 function builder(config) {
+	const plugins = config.plugins ?? [nunjucksPlugin, postcssPlugin];
+
 	function process(paths) {
-		return runner({
+		let runner = createRunner({
 			src: config.src,
 			dest: config.dest,
-		})
-			.use(nunjucksPlugin)
-			.use(postcssPlugin)
-			.process(paths);
+		});
+
+		for (const p of plugins) {
+			runner = runner.use(p);
+		}
+
+		return runner.process(paths);
 	}
 
-	/**
-	 *
-	 * @param {string | string[]} [paths] Only render the files at
-	 * these paths. (default: undefined)
-	 * @returns {Promise<import('@cedar/runner').File[]>} The output file objects
-	 */
 	return async (paths) => {
 		const result = paths ? await process(paths) : await process();
 		await result.write();
@@ -32,4 +31,11 @@ function builder(config) {
 	};
 }
 
-export { builder };
+async function loadConfig(file) {
+	file = file ? file : 'cedar.config.js';
+	file = path.resolve(file);
+	const config = await import(file);
+	return config.default ?? config;
+}
+
+export { builder, loadConfig };
