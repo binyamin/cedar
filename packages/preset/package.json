@@ -1,0 +1,11 @@
+{
+  "name": "@cedar/preset",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.js",
+  "types": "./index.d.ts",
+  "dependencies": {
+    "@cedar/plugin-nunjucks": "workspace:^0.1.0",
+    "@cedar/plugin-postcss": "workspace:^0.1.0"
+  }
+}

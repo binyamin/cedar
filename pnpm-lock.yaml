@@ -24,6 +24,14 @@ importers:
       '@cedar/server': link:../server
       commander: 9.1.0
 
+  packages/preset:
+    specifiers:
+      '@cedar/plugin-nunjucks': workspace:^0.1.0
+      '@cedar/plugin-postcss': workspace:^0.1.0
+    dependencies:
+      '@cedar/plugin-nunjucks': link:../../plugins/nunjucks
+      '@cedar/plugin-postcss': link:../../plugins/postcss
+
   packages/runner:
     specifiers: {}
 
