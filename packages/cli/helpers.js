@@ -1,5 +1,6 @@
 import runner from '@cedar/runner';
 import nunjucksPlugin from '@cedar/plugin-nunjucks';
+import postcssPlugin from '@cedar/plugin-postcss';
 
 /**
  *
@@ -14,6 +15,7 @@ function builder(config) {
 			dest: config.dest,
 		})
 			.use(nunjucksPlugin)
+			.use(postcssPlugin)
 			.process(paths);
 	}
 
