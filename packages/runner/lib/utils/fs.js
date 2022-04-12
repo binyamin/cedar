@@ -40,6 +40,8 @@ export async function writeFile(filepath, data, options) {
 /**
  * Get all files within a directory, recursively
  *
+ * Note - Resulting files begin with `dir`
+ *
  * @param {string} dir Directory to crawl
  * @returns {Promise<string[]>}
  */
@@ -56,8 +58,6 @@ export async function walk(dir) {
 
 	results = await Promise.all(results);
 	results = results.flat();
-	// Explanation: resulting files should be relative to `dir`
-	results = results.map((file) => path.relative(dir, file));
 
 	return results;
 }

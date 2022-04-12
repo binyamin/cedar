@@ -79,7 +79,7 @@ class Runner {
 			const filepaths = await walk(this.#config.src);
 
 			this.#files = await Promise.all(
-				filepaths.map((file) => createFile(path.join(this.#config.src, file))),
+				filepaths.map((file) => createFile(file)),
 			);
 		}
 
