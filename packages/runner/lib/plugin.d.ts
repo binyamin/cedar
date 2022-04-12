@@ -60,10 +60,8 @@ export interface Plugin {
 	 * Perform setup actions, using `context.global`.
 	 * You can share it with `onFile` by using
 	 * `context.state`.
-	 *
-	 * @todo support returning a promise
 	 */
-	init(context: Plugin.Context): void;
+	init(context: Plugin.Context): void | Promise<void>;
 
 	/**
 	 * Run when a file matches one of the {@link extensions}.

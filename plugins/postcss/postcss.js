@@ -1,8 +1,8 @@
 import path from 'node:path';
 
+import { globby } from 'globby';
 import postcss from 'postcss';
 import atImport from 'postcss-import';
-import { globby } from 'globby';
 
 /**
  *
@@ -18,15 +18,14 @@ import { globby } from 'globby';
 const plugin = (options) => ({
 	name: 'postcss',
 	extensions: ['.css', '.pcss'],
-	init(context) {
+	async init(context) {
 		options.sourcemap ??= false; // Change to `true` once implemented
 		options.ignore ??= ['**/_*.{pcss,css}'];
 
 		context.state.engine = postcss().use(atImport());
-		globby(options.ignore, {
+
+		context.state.ignore = await globby(options.ignore, {
 			cwd: context.global.src,
-		}).then((value) => {
-			context.state.ignore = value;
 		});
 	},
 	async onFile(context) {

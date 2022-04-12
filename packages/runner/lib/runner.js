@@ -60,17 +60,22 @@ class Runner {
 	use(plugin, options = {}) {
 		const p = typeof plugin === 'function' ? plugin(options) : plugin;
 
-		p.state = {};
-		p.init({
-			global: this.#config,
-			state: p.state,
-		});
 		this.#plugins.push(p);
 
 		return this;
 	}
 
 	async process(paths) {
+		for (const p of this.#plugins) {
+			p.state = {};
+			const value = p.init({
+				global: this.#config,
+				state: p.state,
+			});
+			/* eslint-disable-next-line no-await-in-loop */
+			if (isPromise(value)) await value;
+		}
+
 		if (paths) {
 			if (Array.isArray(paths)) {
 				this.#files = await Promise.all(paths.map((p) => createFile(p)));
