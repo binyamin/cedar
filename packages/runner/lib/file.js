@@ -6,7 +6,8 @@ import { promises as fs } from 'node:fs';
  * @typedef File
  * @property {string} path
  * @property {string} contents
- * @property {string} destination
+ * @property {string|false} destination To disable writing,
+ * set this to `false`
  */
 
 /**

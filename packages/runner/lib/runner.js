@@ -21,7 +21,9 @@ async function write(files) {
 	const results = [];
 
 	for (const file of files) {
-		results.push(writeFile(file.destination, file.contents, 'utf-8'));
+		if (file.destination) {
+			results.push(writeFile(file.destination, file.contents, 'utf-8'));
+		}
 	}
 
 	await Promise.all(results);
