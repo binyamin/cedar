@@ -56,7 +56,9 @@ program
 			},
 		);
 
-		console.log(`Building ${input} => ${output}`);
+		console.log(
+			`Building ${config?.src || input} => ${config?.dest || output}`,
+		);
 		console.time('build');
 		await build();
 		console.timeEnd('build');
@@ -68,7 +70,7 @@ program
 	.option('-p, --port <number>', 'Port number', 3000)
 	.action(async (input, options, _cmd) => {
 		const { output, config } = program.optsWithGlobals();
-		console.log(`Serving "${input}" on port ${options.port}...`);
+		console.log(`Serving "${config?.src || input}" on port ${options.port}...`);
 
 		const build = builder(
 			config || {
@@ -78,7 +80,7 @@ program
 		);
 
 		const server = new Server({
-			publicDir: output,
+			publicDir: config?.dest || output,
 			watchDir: input,
 			port: options.port,
 		});
