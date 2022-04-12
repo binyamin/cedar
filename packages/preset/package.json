@@ -6,6 +6,11 @@
   "types": "./index.d.ts",
   "dependencies": {
     "@cedar/plugin-nunjucks": "workspace:^0.1.0",
-    "@cedar/plugin-postcss": "workspace:^0.1.0"
+    "@cedar/plugin-postcss": "workspace:^0.1.0",
+    "postcss-csso": "^6.0.0",
+    "postcss-import": "^14.1.0"
+  },
+  "devDependencies": {
+    "postcss": "^8.4.12"
   }
 }

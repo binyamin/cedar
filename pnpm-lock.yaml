@@ -28,9 +28,16 @@ importers:
     specifiers:
       '@cedar/plugin-nunjucks': workspace:^0.1.0
       '@cedar/plugin-postcss': workspace:^0.1.0
+      postcss: ^8.4.12
+      postcss-csso: ^6.0.0
+      postcss-import: ^14.1.0
     dependencies:
       '@cedar/plugin-nunjucks': link:../../plugins/nunjucks
       '@cedar/plugin-postcss': link:../../plugins/postcss
+      postcss-csso: 6.0.0_postcss@8.4.12
+      postcss-import: 14.1.0_postcss@8.4.12
+    devDependencies:
+      postcss: 8.4.12
 
   packages/runner:
     specifiers: {}
@@ -61,11 +68,9 @@ importers:
       '@cedar/runner': workspace:^0.1.0
       globby: ^13.1.1
       postcss: ^8.4.12
-      postcss-import: ^14.1.0
     dependencies:
       globby: 13.1.1
       postcss: 8.4.12
-      postcss-import: 14.1.0_postcss@8.4.12
     devDependencies:
       '@cedar/runner': link:../../packages/runner
 
@@ -590,6 +595,21 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /css-tree/2.0.4:
+    resolution: {integrity: sha512-b4IS9ZUMtGBiNjzYbcj9JhYbyei99R3ai2CSxlu8GQDnoPA/P+NU85hAm0eKDc/Zp660rpK6tFJQ2OSdacMHVg==}
+    engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
+    dependencies:
+      mdn-data: 2.0.23
+      source-map-js: 1.0.2
+    dev: false
+
+  /csso/5.0.3:
+    resolution: {integrity: sha512-93gBHTJ6EQlLNhIX5Ho8VAJD2t2T2wg1xHDjbIUm/oQ7iFiSUTo9jSojiQK0pEZ3lMhYDrQO7Rcd70M68+VrtA==}
+    engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
+    dependencies:
+      css-tree: 2.0.4
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -1820,6 +1840,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /mdn-data/2.0.23:
+    resolution: {integrity: sha512-IonVb7pfla2U4zW8rc7XGrtgq11BvYeCxWN8HS+KFBnLDE7XDK9AAMVhRuG6fj9BBsjc69Fqsp6WEActEdNTDQ==}
+    dev: false
+
   /memory-fs/0.2.0:
     resolution: {integrity: sha1-8rslNovBIeORwlIN6Slpyu4KApA=}
     dev: true
@@ -1923,7 +1947,6 @@ packages:
     resolution: {integrity: sha512-CuHBogktKwpm5g2sRgv83jEy2ijFzBwMoYA60orPDR7ynsLijJDqgsi4RDGj3OJpy3Ieb+LYwiRmIOGyytgITA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-    dev: false
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
@@ -2181,7 +2204,6 @@ packages:
 
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
-    dev: false
 
   /picomatch/2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
@@ -2218,6 +2240,16 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /postcss-csso/6.0.0_postcss@8.4.12:
+    resolution: {integrity: sha512-LsrU+LVR0mNIYauoTEbYVC81i+yXcGWa9kqW6Lvm+gYUZTaNTJmJT6Dbv+fqT8gOnwXAH1RV+5RXvAVoRtwO+g==}
+    engines: {node: ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
+    peerDependencies:
+      postcss: ^8.0.0
+    dependencies:
+      csso: 5.0.3
+      postcss: 8.4.12
+    dev: false
+
   /postcss-import/14.1.0_postcss@8.4.12:
     resolution: {integrity: sha512-flwI+Vgm4SElObFVPpTIT7SU7R3qk2L7PyduMcokiaVKuWv9d/U+Gm/QAd8NDLuykTWTkcrjOeD2Pp1rMeBTGw==}
     engines: {node: '>=10.0.0'}
@@ -2241,7 +2273,6 @@ packages:
       nanoid: 3.3.2
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: false
 
   /prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -2486,7 +2517,6 @@ packages:
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
-    dev: false
 
   /spdx-correct/3.1.1:
     resolution: {integrity: sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==}

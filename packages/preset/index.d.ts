@@ -1,3 +1,4 @@
+import { type AcceptedPlugin } from 'postcss';
 import { Config } from '../cli/helpers.js';
 
 type PartialDeep<T> = {
@@ -32,6 +33,12 @@ declare interface Options extends Omit<Config, 'src'> {
 		 * @default undefined
 		 */
 		partials: string;
+		/**
+		 *
+		 * Array of postcss plugins. Defaults to
+		 * postcss-import and postcss-csso.
+		 */
+		plugins: AcceptedPlugin[];
 	};
 }
 

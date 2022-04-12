@@ -3,6 +3,9 @@ import path from 'node:path';
 import nunjucksPlugin from '@cedar/plugin-nunjucks';
 import postcssPlugin from '@cedar/plugin-postcss';
 
+import atImport from 'postcss-import';
+import csso from 'postcss-csso';
+
 /**
  *
  * @param {import('.').Options} options
@@ -25,6 +28,7 @@ function preset(options) {
 				/* eslint-enable prettier/prettier */
 			}),
 			postcssPlugin({
+				plugins: options.postcss?.plugins ?? [atImport, csso],
 				/* eslint-disable prettier/prettier */
 				...(options.postcss?.partials
 					? {

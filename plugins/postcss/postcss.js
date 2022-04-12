@@ -2,7 +2,6 @@ import path from 'node:path';
 
 import { globby } from 'globby';
 import postcss from 'postcss';
-import atImport from 'postcss-import';
 
 /**
  *
@@ -13,6 +12,7 @@ import atImport from 'postcss-import';
  * but don't write anything. Useful for partials. Accepts
  * an array of globs. Defaults to any `.pcss` or `.css` file
  * starting with an underscore.
+ * @param {import('postcss').AcceptedPlugin[]} [options.plugins] temporary fix for issue 1
  * @returns {import("@cedar/runner").plugin}
  */
 const plugin = (options) => ({
@@ -21,8 +21,9 @@ const plugin = (options) => ({
 	async init(context) {
 		options.sourcemap ??= false; // Change to `true` once implemented
 		options.ignore ??= ['**/_*.{pcss,css}'];
+		options.plugins ??= [];
 
-		context.state.engine = postcss().use(atImport());
+		context.state.engine = postcss(options.plugins);
 
 		context.state.ignore = await globby(options.ignore, {
 			cwd: context.global.src,
