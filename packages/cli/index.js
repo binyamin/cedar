@@ -1,8 +1,8 @@
-import Server from '@cedar/server';
 import { program } from 'commander';
 import debug from 'debug';
 
-import { builder, loadConfig } from './helpers.js';
+import * as commands from './commands/index.js';
+import { loadConfig, parseOption } from './helpers.js';
 
 program
 	.name('cedar')
@@ -11,25 +11,13 @@ program
 	.option(
 		'-o, --output <path>',
 		'Define the output directory',
-		(value) => {
-			if (value[0] === '=') {
-				value = value.slice(1);
-			}
-
-			return value;
-		},
+		parseOption,
 		'out',
 	)
 	.option(
 		'-c, --config <path>',
 		'Specify the path to a config file',
-		(value) => {
-			if (value[0] === '=') {
-				value = value.slice(1);
-			}
-
-			return value;
-		},
+		parseOption,
 	);
 
 program.hook('preAction', async (_cmd, _action) => {
@@ -41,68 +29,11 @@ program.hook('preAction', async (_cmd, _action) => {
 	);
 });
 
-program
-	.command('build <input>', {
-		isDefault: true,
-		hidden: true,
-	})
-	.description('Build the site')
-	.action(async (input, _options, _cmd) => {
-		const { output, config } = program.optsWithGlobals();
-		const build = builder(
-			config || {
-				src: input,
-				dest: output,
-			},
-		);
+program.addCommand(commands.build, {
+	hidden: true,
+	isDefault: true,
+});
 
-		console.log(
-			`Building ${config?.src || input} => ${config?.dest || output}`,
-		);
-		console.time('Time');
+program.addCommand(commands.serve);
 
-		const stats = await build();
-
-		// Build stats
-		console.group('Done');
-		console.timeEnd('Time');
-		console.log('Read: %f files', stats.length);
-		console.log('Wrote: %f files', stats.filter((f) => f.destination).length);
-		console.groupEnd();
-	});
-
-program
-	.command('serve <input>')
-	.description('server the given folder')
-	.option('-p, --port <number>', 'Port number', 3000)
-	.action(async (input, options, _cmd) => {
-		const { output, config } = program.optsWithGlobals();
-		console.log(`Serving "${config?.src || input}" on port ${options.port}...`);
-
-		const build = builder(
-			config || {
-				src: input,
-				dest: output,
-			},
-		);
-
-		const server = new Server({
-			publicDir: config?.dest || output,
-			watchDir: input,
-			port: options.port,
-		});
-
-		server.on('change', async (filepath) => {
-			// TODO If possible, reuse previous line for
-			// this `console.error`
-			console.error('File changed - %s', filepath);
-
-			const f = await build(filepath);
-			filepath = f[0].destination;
-			server.reload(filepath);
-		});
-
-		await server.start();
-	});
-
-program.parse();
+await program.parseAsync();

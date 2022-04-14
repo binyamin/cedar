@@ -6,11 +6,32 @@ import postcssPlugin from '@cedar/plugin-postcss';
 
 /**
  *
- * @param {import("./helpers").Config} config
+ * Given a raw command-line option, checks for and removes
+ * the leading equal sign.
+ *
+ * @param {string} value
+ * @returns {string}
  */
-function builder(config) {
+export function parseOption(value) {
+	if (value[0] === '=') {
+		value = value.slice(1);
+	}
+
+	return value;
+}
+
+/**
+ *
+ * @param {import("./types").Config} config
+ */
+export function builder(config) {
 	const plugins = config.plugins ?? [nunjucksPlugin, postcssPlugin];
 
+	/**
+	 *
+	 * @param {string[] | string} paths
+	 * @returns {Promise<import("@cedar/runner/lib/runner").Result>}
+	 */
 	function process(paths) {
 		let runner = createRunner({
 			src: config.src,
@@ -24,15 +45,32 @@ function builder(config) {
 		return runner.process(paths);
 	}
 
-	return async (paths) => {
+	/**
+	 * Process and write files, and return their contents.
+	 *
+	 * @param {string[]} [paths] Only render the files at these paths.
+	 * @returns {Promise<import('@cedar/runner').File[]>} The output file objects
+	 */
+	async function write(paths) {
 		const result = paths ? await process(paths) : await process();
 		await result.write();
 		return result.files;
-	};
+	}
+
+	return write;
 }
 
 /**
- * Utility function, so we can easily look for multiple filenames
+ * @access private
+ *
+ * Given a list of file-paths, load the first one which exists.
+ *
+ * @summary Utility function, so we can easily look for multiple
+ * config files.
+ *
+ * @param {string[]} files List of file-paths
+ * @returns {Promise<unknown>} The default export of the first
+ * file which resolves. May be `void`.
  */
 async function tryLoad(...files) {
 	for (let file of files) {
@@ -40,8 +78,8 @@ async function tryLoad(...files) {
 
 		try {
 			/* eslint-disable-next-line no-await-in-loop */
-			const config = await import(file);
-			return config.default ?? config;
+			const contents = await import(file);
+			return contents.default ?? contents;
 		} catch (error) {
 			if (error.code === 'ERR_MODULE_NOT_FOUND') {
 				continue;
@@ -52,12 +90,19 @@ async function tryLoad(...files) {
 	}
 }
 
-async function loadConfig(file) {
+/**
+ *
+ * Loads the given config file, or the default config file.
+ *
+ * @param {string} [file] Load this file instead of the default
+ * file.
+ * @returns {Promise<import('./types').Config | void>} The
+ * resolved configuration, or nothing.
+ */
+export async function loadConfig(file) {
 	if (file) {
 		return tryLoad(file);
 	}
 
 	return tryLoad('cedar.config.js', 'cedar.config.mjs', 'cedar.config.cjs');
 }
-
-export { builder, loadConfig };
