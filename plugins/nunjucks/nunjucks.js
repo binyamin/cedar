@@ -22,14 +22,21 @@ class Engine extends nunjucks.Environment {
 function plugin(options) {
 	options.extensions ??= ['.njk'];
 	options.ignored ??= options.extensions.map((ext) => `**/_*${ext}`);
+	options.data ??= {};
 
 	return {
 		name: 'nunjucks',
 		extensions: options.extensions,
 		init(context) {
-			context.state.engine = new Engine({
+			const engine = new Engine({
 				dirs: context.global.src,
 			});
+
+			for (const [key, value] of Object.entries(options.data)) {
+				engine.addGlobal(key, value);
+			}
+
+			context.state.engine = engine;
 
 			globby(options.ignored, {
 				cwd: context.global.src,

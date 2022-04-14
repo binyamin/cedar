@@ -71,9 +71,7 @@ declare namespace nunjucks {
 		 *
 		 * Global data to share between templates.
 		 *
-		 * @default undefined;
-		 *
-		 * @todo
+		 * @default {}
 		 */
 		data?: Record<string, any>;
 
