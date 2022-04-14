@@ -1,3 +1,5 @@
+import { EventEmitter } from 'node:events';
+
 import FileServer from './lib/http.js';
 import Reloader from './lib/reloader.js';
 import Watcher from './lib/watcher.js';
@@ -8,6 +10,8 @@ class Server {
 	#http;
 	#reload;
 	#watcher;
+
+	#events;
 
 	/**
 	 *
@@ -22,6 +26,10 @@ class Server {
 			options,
 		);
 
+		this.#events = new EventEmitter({
+			captureRejections: true,
+		});
+
 		this.#http = new FileServer({
 			dir: this.#options.publicDir,
 		});
@@ -29,6 +37,22 @@ class Server {
 		this.#reload = new Reloader();
 
 		this.#watcher = new Watcher(this.#options.watchDir);
+
+		this.#registerEvents();
+	}
+
+	#registerEvents() {
+		this.#http.server.on('request', (request, response) => {
+			this.#events.emit('request', request, response);
+		});
+
+		this.#watcher.on('change', (path, stats) => {
+			this.#events.emit('change', path, stats);
+		});
+	}
+
+	get events() {
+		return this.#events;
 	}
 
 	async start() {
@@ -39,13 +63,8 @@ class Server {
 		this.#watcher.start();
 	}
 
-	on(event, callback) {
-		switch (event) {
-			case 'change':
-				this.#watcher.on('change', callback);
-				break;
-			default:
-		}
+	on(eventName, listener) {
+		this.events.on(eventName, listener);
 	}
 
 	/**
@@ -60,6 +79,8 @@ class Server {
 	}
 
 	async close() {
+		this.#events.emit('close');
+
 		await Promise.all([
 			this.#http.close(),
 			this.#reload.close(),

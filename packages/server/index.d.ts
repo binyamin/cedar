@@ -1,64 +1,69 @@
-export interface Options {
-	/**
-	 *
-	 * Serve this directory. Also, reload the browser when a change is detected.
-	 * The latter can be customized with {@link watchDir `watchDir`}.
-	 */
-	publicDir: string;
+import { EventEmitter } from 'node:events';
+import fs from 'node:fs';
+import { RequestListener } from 'node:http';
 
-	/**
-	 *
-	 * Reload the browser tab when a file within changes.
-	 * Defaults to the value of {@link publicDir `publicDir`}.
-	 *
-	 * @default this.publicDir
-	 */
-	watchDir?: string;
+import TypedEventEmitter from 'typed-emitter';
 
-	/**
-	 *
-	 * The port for the http server.
-	 *
-	 * @default 3000
-	 */
-	port?: number;
+declare namespace server {
+	interface Options {
+		/**
+		 *
+		 * Serve this directory. Also, reload the browser when a change is detected.
+		 * The latter can be customized with {@link watchDir `watchDir`}.
+		 */
+		publicDir: string;
+
+		/**
+		 *
+		 * Reload the browser tab when a file within changes.
+		 * Defaults to the value of {@link publicDir `publicDir`}.
+		 *
+		 * @default this.publicDir
+		 */
+		watchDir?: string;
+
+		/**
+		 *
+		 * The port for the http server.
+		 *
+		 * @default 3000
+		 */
+		port?: number;
+	}
+
+	type EventMap = {
+		close: () => void | Promise<void>;
+		request: RequestListener;
+		change: (path: string, stats?: fs.Stats) => void | Promise<void>;
+	};
+
+	class Events extends (EventEmitter as new () => TypedEventEmitter<EventMap>) {}
 }
 
 declare class Server {
-	constructor(options: Options);
+	/**
+	 *
+	 * Add an event listener. Alias for `events.on`.
+	 */
+	on: server.Events['on'];
+
+	constructor(options: server.Options);
+
+	/**
+	 *
+	 * An Event Emitter
+	 *
+	 * There are 3 events:
+	 * - _change_ - Same as chokidar's  _change_ event
+	 * - _close_ - Emitted when the Server's  `close()`
+	 * method is called
+	 * - _request_ - Connected to a Node.js HTTP server
+	 *
+	 * @since 0.2.0
+	 */
+	get events(): server.Events;
 
 	start(): Promise<void>;
-
-	/**
-	 *
-	 * Looks like an event-emitter, but isn't one.
-	 */
-	on(event: string, listener: (...args: any[]) => void): void;
-
-	/**
-	 *
-	 * Run a function whenever a file changes.
-	 *
-	 * @example
-	 * ```js
-	 * server.on('change', (file) => {
-	 * 	console.error('File changed - %s', file);
-	 * })
-	 * ```
-	 */
-	on(
-		event: 'change',
-		listener: (
-			/**
-			 *
-			 * Path to the file which changed. Relative to
-			 * {@link Options.watchDir `options.watchDir`} (or
-			 * {@link Options.publicDir `options.publicDir`},
-			 * if the former is not defined).
-			 */
-			path: string,
-		) => void,
-	): void;
 
 	/**
 	 *
