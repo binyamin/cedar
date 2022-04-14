@@ -1,7 +1,23 @@
 import { createCommand } from 'commander';
+import logUpdate from 'log-update';
 import Server from '@cedar/server';
 
 import { builder } from '../helpers.js';
+
+function logCount(file) {
+	logCount.file ??= file;
+	logCount.count ??= 0;
+
+	if (logCount.file !== file) {
+		logCount.file = file;
+		logCount.count = 0;
+		logUpdate.done();
+	}
+
+	logCount.count++;
+
+	logUpdate(`Changed ${logCount.file} (x${logCount.count})`);
+}
 
 export default createCommand('serve')
 	.argument('<input>')
@@ -25,13 +41,15 @@ export default createCommand('serve')
 		});
 
 		server.on('change', async (filepath) => {
-			// TODO If possible, reuse previous line for
-			// this `console.error`
-			console.error('File changed - %s', filepath);
+			logCount(filepath);
 
 			const f = await build(filepath);
 			filepath = f[0].destination;
 			server.reload(filepath);
+		});
+
+		server.on('close', () => {
+			logUpdate.done();
 		});
 
 		await server.start();

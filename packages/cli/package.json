@@ -8,6 +8,7 @@
     "@cedar/plugin-postcss": "workspace:^0.1.0",
     "@cedar/runner": "workspace:^0.1.0",
     "@cedar/server": "workspace:^0.2.0",
-    "commander": "^9.1.0"
+    "commander": "^9.1.0",
+    "log-update": "^5.0.0"
   }
 }
