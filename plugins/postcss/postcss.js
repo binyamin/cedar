@@ -54,6 +54,17 @@ const plugin = (options) => ({
 			: {}),
 			/* eslint-enable prettier/prettier */
 		});
+
+		// Print any PostCSS warnings
+		if (result.warnings().length > 0) {
+			console.group('PostCSS');
+			for (const warn of result.warnings()) {
+				console.warn(warn.toString());
+			}
+
+			console.groupEnd();
+		}
+
 		context.file.contents = result.content;
 		return context.file;
 	},
