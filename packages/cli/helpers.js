@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fs from 'node:fs/promises';
 
 import createRunner from '@cedar/runner';
 import nunjucksPlugin from '@cedar/plugin-nunjucks';
@@ -73,21 +74,25 @@ export function builder(config) {
  * file which resolves. May be `void`.
  */
 async function tryLoad(...files) {
+	const results = [];
 	for (let file of files) {
 		file = path.resolve(file);
 
 		try {
 			/* eslint-disable-next-line no-await-in-loop */
-			const contents = await import(file);
-			return contents.default ?? contents;
+			await fs.access(file);
+			results.push(import(file));
 		} catch (error) {
-			if (error.code === 'ERR_MODULE_NOT_FOUND') {
+			if (error.code === 'ENOENT') {
 				continue;
 			}
 
 			throw error;
 		}
 	}
+
+	const [contents] = await Promise.all(results);
+	return contents.default ?? contents;
 }
 
 /**

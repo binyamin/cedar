@@ -27,7 +27,7 @@ function plugin(options) {
 	return {
 		name: 'nunjucks',
 		extensions: options.extensions,
-		init(context) {
+		async init(context) {
 			const engine = new Engine({
 				dirs: context.global.src,
 			});
@@ -38,10 +38,8 @@ function plugin(options) {
 
 			context.state.engine = engine;
 
-			globby(options.ignored, {
+			context.state.ignored = await globby(options.ignored, {
 				cwd: context.global.src,
-			}).then((value) => {
-				context.state.ignored = value;
 			});
 		},
 		onFile({ file, ...context }) {
