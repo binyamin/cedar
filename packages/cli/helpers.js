@@ -85,7 +85,7 @@ async function tryLoad(...files) {
 				continue;
 			}
 
-			throw new Error(error);
+			throw error;
 		}
 	}
 }
