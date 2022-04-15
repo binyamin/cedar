@@ -30,12 +30,16 @@ importers:
     specifiers:
       '@cedar/plugin-nunjucks': workspace:^0.1.0
       '@cedar/plugin-postcss': workspace:^0.1.0
+      '@nodelib/fs.walk': ^1.2.8
+      dot-prop: ^7.2.0
       postcss: ^8.4.12
       postcss-csso: ^6.0.0
       postcss-import: ^14.1.0
     dependencies:
       '@cedar/plugin-nunjucks': link:../../plugins/nunjucks
       '@cedar/plugin-postcss': link:../../plugins/postcss
+      '@nodelib/fs.walk': 1.2.8
+      dot-prop: 7.2.0
       postcss-csso: 6.0.0_postcss@8.4.12
       postcss-import: 14.1.0_postcss@8.4.12
     devDependencies:
@@ -720,6 +724,13 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /dot-prop/7.2.0:
+    resolution: {integrity: sha512-Ol/IPXUARn9CSbkrdV4VJo7uCy1I3VuSiWCaFSg+8BdUOzF9n3jefIpcgAydvUZbTdEBZs2vEiTiS9m61ssiDA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      type-fest: 2.12.2
+    dev: false
 
   /eastasianwidth/0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -2822,7 +2833,6 @@ packages:
   /type-fest/2.12.2:
     resolution: {integrity: sha512-qt6ylCGpLjZ7AaODxbpyBZSs9fCI9SkL3Z9q2oxMBQhs/uyY+VD8jHA8ULCGmWQJlBgqvO3EJeAngOHD8zQCrQ==}
     engines: {node: '>=12.20'}
-    dev: true
 
   /typed-emitter/2.1.0:
     resolution: {integrity: sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==}
