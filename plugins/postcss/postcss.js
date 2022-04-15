@@ -8,7 +8,7 @@ import postcss from 'postcss';
  * @param {object} options
  * @param {boolean} [options.sourcemap=true] Not yet implemented.
  * (Generate sourcemaps. Default is `true`)
- * @param {string[]} [options.ignore] Process these files,
+ * @param {string[]} [options.ignored] Process these files,
  * but don't write anything. Useful for partials. Accepts
  * an array of globs. Defaults to any `.pcss` or `.css` file
  * starting with an underscore.
@@ -20,12 +20,12 @@ const plugin = (options) => ({
 	extensions: ['.css', '.pcss'],
 	async init(context) {
 		options.sourcemap ??= false; // Change to `true` once implemented
-		options.ignore ??= ['**/_*.{pcss,css}'];
+		options.ignored ??= ['**/_*.{pcss,css}'];
 		options.plugins ??= [];
 
 		context.state.engine = postcss(options.plugins);
 
-		context.state.ignore = await globby(options.ignore, {
+		context.state.ignore = await globby(options.ignored, {
 			cwd: context.global.src,
 		});
 	},
