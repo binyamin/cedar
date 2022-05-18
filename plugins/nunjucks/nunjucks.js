@@ -1,5 +1,4 @@
 import path from 'node:path';
-import { promisify } from 'node:util';
 import { isAsyncFunction } from 'node:util/types';
 
 import { globby } from 'globby';
@@ -42,7 +41,7 @@ function plugin(options) {
 				if (isAsyncFunction(value)) {
 					engine.addFilter(key, value, true);
 				} else {
-					engine.addFilter(key, value);
+					engine.addFilter(key, value, false);
 				}
 			}
 
@@ -65,7 +64,12 @@ function plugin(options) {
 			/** @type {Engine} */
 			const engine = context.state.engine;
 
-			file.contents = await promisify(engine.renderString)(file.contents, {});
+			file.contents = await new Promise((resolve, reject) => {
+				engine.renderString(file.contents, {}, (err, res) => {
+					if (err) reject(err);
+					resolve(res);
+				});
+			})
 
 			const ext = options.extensions
 				.filter((ext) => file.destination.endsWith(ext))
