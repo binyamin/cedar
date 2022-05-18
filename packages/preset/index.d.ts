@@ -1,3 +1,4 @@
+import type nunjucks from '@cedar/plugin-nunjucks';
 import { type AcceptedPlugin } from 'postcss';
 import { type Config } from '../cli/types.js';
 
@@ -23,6 +24,15 @@ declare interface Options extends Omit<Config, 'src'> {
 		 * Relative to the current directory, not `config.src`.
 		 */
 		data: string;
+
+		/**
+		 *
+		 * Custom filters for nunjucks.
+		 * 
+		 * @default
+		 * {}
+		 */
+		filters: Record<string, nunjucks.Filter>;
 	};
 	postcss: {
 		/**

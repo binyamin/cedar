@@ -1,4 +1,6 @@
 import path from 'node:path';
+import { promisify } from 'node:util';
+import { isAsyncFunction } from 'node:util/types';
 
 import { globby } from 'globby';
 import nunjucks from 'nunjucks';
@@ -36,13 +38,21 @@ function plugin(options) {
 				engine.addGlobal(key, value);
 			}
 
+			for (const [key, value] of Object.entries(options.filters)) {
+				if (isAsyncFunction(value)) {
+					engine.addFilter(key, value, true);
+				} else {
+					engine.addFilter(key, value);
+				}
+			}
+
 			context.state.engine = engine;
 
 			context.state.ignored = await globby(options.ignored, {
 				cwd: context.global.src,
 			});
 		},
-		onFile({ file, ...context }) {
+		async onFile({ file, ...context }) {
 			const isPartial = context.state.ignored.includes(
 				path.relative(context.global.src, file.path),
 			);
@@ -55,7 +65,7 @@ function plugin(options) {
 			/** @type {Engine} */
 			const engine = context.state.engine;
 
-			file.contents = engine.renderString(file.contents, {});
+			file.contents = await promisify(engine.renderString)(file.contents, {});
 
 			const ext = options.extensions
 				.filter((ext) => file.destination.endsWith(ext))

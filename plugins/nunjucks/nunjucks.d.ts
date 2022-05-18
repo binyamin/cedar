@@ -59,11 +59,14 @@ declare namespace nunjucks {
 		outExtension?: (ext: string) => string;
 
 		/**
+		 *
 		 * Custom filters for nunjucks
 		 *
-		 * @default undefined
+		 * @note Async functions are resolved, but returned
+		 * Promise objects are not. This is a limitation of
+		 * nunjucks.
 		 *
-		 * @todo
+		 * @default undefined
 		 */
 		filters?: Record<string, Filter>;
 

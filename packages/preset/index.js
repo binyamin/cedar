@@ -42,6 +42,7 @@ async function preset(options) {
 				extensions: ['.html', '.njk'],
 				data,
 				...(njkIgnored.length > 0 ? { ignored: njkIgnored } : {}),
+				filters: options.nunjucks.filters ?? {},
 			}),
 			postcssPlugin({
 				plugins: options.postcss?.plugins ?? [atImport, csso],
