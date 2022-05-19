@@ -26,7 +26,7 @@ export function parseOption(value) {
  * @param {import("./types").Config} config
  */
 export function builder(config) {
-	const plugins = config.plugins ?? [nunjucksPlugin, postcssPlugin];
+	config.plugins = [nunjucksPlugin, postcssPlugin];
 
 	/**
 	 *
@@ -39,7 +39,7 @@ export function builder(config) {
 			dest: config.dest,
 		});
 
-		for (const p of plugins) {
+		for (const p of config.plugins) {
 			runner = runner.use(p);
 		}
 
@@ -92,7 +92,7 @@ async function tryLoad(...files) {
 	}
 
 	const [contents] = await Promise.all(results);
-	return contents.default ?? contents;
+	return contents?.default ?? contents;
 }
 
 /**
