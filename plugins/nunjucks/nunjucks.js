@@ -24,6 +24,7 @@ function plugin(options) {
 	options.extensions ??= ['.njk'];
 	options.ignored ??= options.extensions.map((ext) => `**/_*${ext}`);
 	options.data ??= {};
+	options.filters ??= {};
 
 	return {
 		name: 'nunjucks',

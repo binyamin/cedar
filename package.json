@@ -16,5 +16,5 @@
     "debug": "^4.3.4",
     "xo": "^0.48.0"
   },
-  "packageManager": "pnpm@6.32.3"
+  "packageManager": "pnpm@7.1.2"
 }
