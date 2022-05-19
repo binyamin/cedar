@@ -4,3 +4,4 @@
 - [ ] Process JSX, SSR _and_ normal (with `preact`)
     - [ ] Imported CSS as separate file?
 - [x] Fix linting errors (from `xo`)
+- [ ] feature: supply a single file as input
