@@ -7,6 +7,8 @@ import { loadConfig, parseOption } from './helpers.js';
 program
 	.name('cedar')
 	.version('0.1.0', '-v, --version')
+	.description("A set of tools for building static sites")
+	.showSuggestionAfterError(true)
 	.option('-d, --debug', 'print debugging information', false)
 	.option(
 		'-o, --output <path>',
@@ -29,11 +31,7 @@ program.hook('preAction', async (_cmd, _action) => {
 	);
 });
 
-program.addCommand(commands.build, {
-	hidden: true,
-	isDefault: true,
-});
-
+program.addCommand(commands.build);
 program.addCommand(commands.serve);
 
 await program.parseAsync();
