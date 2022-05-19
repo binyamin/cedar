@@ -28,7 +28,7 @@ declare interface Options extends Omit<Config, 'src'> {
 		/**
 		 *
 		 * Custom filters for nunjucks.
-		 * 
+		 *
 		 * @default
 		 * {}
 		 */

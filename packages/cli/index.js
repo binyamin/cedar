@@ -7,7 +7,7 @@ import { loadConfig, parseOption } from './helpers.js';
 program
 	.name('cedar')
 	.version('0.1.0', '-v, --version')
-	.description("A set of tools for building static sites")
+	.description('A set of tools for building static sites')
 	.showSuggestionAfterError(true)
 	.option('-d, --debug', 'print debugging information', false)
 	.option(

@@ -66,11 +66,11 @@ function plugin(options) {
 			const engine = context.state.engine;
 
 			file.contents = await new Promise((resolve, reject) => {
-				engine.renderString(file.contents, {}, (err, res) => {
-					if (err) reject(err);
-					resolve(res);
+				engine.renderString(file.contents, {}, (error, response) => {
+					if (error) reject(error);
+					resolve(response);
 				});
-			})
+			});
 
 			const ext = options.extensions
 				.filter((ext) => file.destination.endsWith(ext))
