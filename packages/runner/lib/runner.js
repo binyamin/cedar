@@ -5,7 +5,10 @@ import { walk, writeFile } from './utils/fs.js';
 import { createDebug } from './utils/log.js';
 import { createFile } from './file.js';
 
-const debug = createDebug('runner');
+const debug = {
+	main: createDebug('runner'),
+	plugins: createDebug('plugins'),
+};
 
 /**
  * @typedef {import("./plugin.js").Options} Options
@@ -22,6 +25,7 @@ async function write(files) {
 
 	for (const file of files) {
 		if (file.destination) {
+			debug.main('Writing "%s" to "%s"', file.path, file.destination);
 			results.push(writeFile(file.destination, file.contents, 'utf-8'));
 		}
 	}
@@ -100,7 +104,7 @@ class Runner {
 
 			for (const plugin of this.#plugins) {
 				if (plugin.extensions.some((value) => file.path.endsWith(value))) {
-					debug('running plugin:%s', plugin.name);
+					debug.plugins('running plugin:%s on "%s"', plugin.name, file.path);
 
 					const value = plugin.onFile({
 						global: this.#config,
