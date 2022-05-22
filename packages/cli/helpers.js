@@ -26,7 +26,7 @@ export function parseOption(value) {
  * @param {import("./types").Config} config
  */
 export function builder(config) {
-	config.plugins = [nunjucksPlugin, postcssPlugin];
+	config.plugins ??= [nunjucksPlugin, postcssPlugin];
 
 	/**
 	 *
