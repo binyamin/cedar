@@ -54,32 +54,33 @@ function plugin(options) {
 		},
 		async onFile({ file, ...context }) {
 			const isPartial = context.state.ignored.includes(
-				path.relative(context.global.src, file.path),
+				path.relative(context.global.dest, file.path),
 			);
 
 			if (isPartial) {
-				file.destination = false;
-				return file;
+				file.data.write = false;
+				return;
 			}
 
 			/** @type {Engine} */
 			const engine = context.state.engine;
 
-			file.contents = await new Promise((resolve, reject) => {
-				engine.renderString(file.contents, {}, (error, response) => {
+			file.value = await new Promise((resolve, reject) => {
+				engine.renderString(file.value, {}, (error, response) => {
 					if (error) reject(error);
 					resolve(response);
 				});
 			});
 
 			const ext = options.extensions
-				.filter((ext) => file.destination.endsWith(ext))
+				.filter((ext) => file.extname === ext)
 				.sort((a, b) => a.length - b.length)[0];
 
-			file.destination = file.destination.replace(new RegExp(ext + '$'), '');
-			if (!file.destination.includes('.')) file.destination += '.html';
-
-			return file;
+			let dest = file.basename.replace(new RegExp(ext + '$'), '');
+			if (!dest.includes('.')) dest += '.html';
+			file.data.rename({
+				basename: dest,
+			});
 		},
 	};
 }

@@ -1,9 +1,8 @@
-import path from 'node:path';
 import { isPromise } from 'node:util/types';
 
-import { walk, writeFile } from './utils/fs.js';
+import { walk } from './utils/fs.js';
 import { createDebug } from './utils/log.js';
-import { createFile } from './file.js';
+import * as fileUtils from './file.js';
 
 const debug = {
 	main: createDebug('runner'),
@@ -14,23 +13,25 @@ const debug = {
  * @typedef {import("./plugin.js").Options} Options
  * @typedef {import("./plugin.js").Plugin} Plugin
  * @typedef {import('./file.js').File} File
+ * @typedef {import("vfile").VFile} vFile
  */
 
 /**
  *
- * @param {File[]} files
+ * @param {vFile[]} files
  */
-async function write(files) {
+async function writeAll(files) {
 	const results = [];
 
 	for (const file of files) {
-		if (file.destination) {
-			debug.main('Writing "%s" to "%s"', file.path, file.destination);
-			results.push(writeFile(file.destination, file.contents, 'utf-8'));
+		if (file.data.write) {
+			debug.main('Writing "%s" to "%s"', file.path, file.dirname);
+			results.push(fileUtils.write(file));
 		}
 	}
 
 	await Promise.all(results);
+	console.log(fileUtils.report(files));
 }
 
 class Runner {
@@ -45,7 +46,7 @@ class Runner {
 	#plugins = [];
 
 	/**
-	 * @type {File[]}
+	 * @type {vFile[]}
 	 */
 	#files = [];
 
@@ -82,48 +83,44 @@ class Runner {
 
 		if (paths) {
 			if (Array.isArray(paths)) {
-				this.#files = await Promise.all(paths.map((p) => createFile(p)));
+				this.#files = await Promise.all(paths.map((p) => fileUtils.create(p)));
 			} else {
-				this.#files = [await createFile(paths)];
+				this.#files = [await fileUtils.create(paths)];
 			}
 		} else {
 			const filepaths = await walk(this.#config.src);
 
 			this.#files = await Promise.all(
-				filepaths.map((file) => createFile(file)),
+				filepaths.map((file) => fileUtils.create(file)),
 			);
 		}
 
 		// Note: Because we're using `const file` and not `let file`, we get
 		// a reference to the array item itself.
 		for (const file of this.#files) {
-			file.destination ??= path.join(
-				this.#config.dest,
-				path.relative(this.#config.src, file.path),
-			);
+			file.data.rename({
+				path: file.path.replace(this.#config.src, this.#config.dest),
+			});
 
 			for (const plugin of this.#plugins) {
-				if (plugin.extensions.some((value) => file.path.endsWith(value))) {
+				if (plugin.extensions.includes(file.extname)) {
 					debug.plugins('running plugin:%s on "%s"', plugin.name, file.path);
 
 					const value = plugin.onFile({
 						global: this.#config,
 						state: plugin.state,
-						// Prevent user from modifying original object, using `Object.assign`
-						file: Object.assign({}, file),
+						file,
 					});
 
 					/* eslint-disable-next-line no-await-in-loop */
-					Object.assign(file, isPromise(value) ? await value : value);
-					// Note: because we're using `const file` above, we need to
-					// we can't overwrite `file` directly. This is a workaround.
+					if (isPromise(value)) await value;
 				}
 			}
 		}
 
 		return {
 			files: this.#files,
-			write: () => write(this.#files),
+			write: () => writeAll(this.#files),
 		};
 	}
 }

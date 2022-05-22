@@ -1,8 +1,32 @@
-import type { File } from './file.js';
+import type { VFile } from 'vfile';
+import { Renames } from 'vfile-rename';
 
 export interface Options {
 	src: string;
 	dest: string;
+}
+
+// Custom data for vfile
+declare module 'vfile' {
+	/* eslint-disable-next-line @typescript-eslint/naming-convention */
+	interface VFileDataMap {
+		/**
+		 *
+		 * Whether this file will be written to disk
+		 *
+		 * @default
+		 * true
+		 */
+		write: boolean;
+
+		/**
+		 * Utility for manipulating the file-path.
+		 *
+		 * @link
+		 * See [vfile/vfile-rename](https://github.com/vfile/vfile-rename) on GitHub
+		 */
+		rename(options: Renames): void;
+	}
 }
 
 declare namespace Plugin {
@@ -12,12 +36,26 @@ declare namespace Plugin {
 		 * Global configuration. User-defined.
 		 */
 		global: Readonly<Options>;
+
 		/**
 		 *
 		 * Use this property to share information between
 		 * `init` and `onFile`.
 		 */
 		state: Record<string, any>;
+
+		/**
+		 *
+		 * Represents a file which can be transformed
+		 *
+		 * **Tips**:
+		 * - For source-maps, use the `file.map` object
+		 * - To tell the processor not to write a file, set
+		 * the `data.write` field to `false`
+		 *
+		 * @note - Not present for the `onInit` method.
+		 */
+		file: VFile;
 	}
 }
 
@@ -61,12 +99,12 @@ export interface Plugin {
 	 * You can share it with `onFile` by using
 	 * `context.state`.
 	 */
-	init(context: Plugin.Context): void | Promise<void>;
+	init(context: Omit<Plugin.Context, 'file'>): void | Promise<void>;
 
 	/**
 	 * Run when a file matches one of the {@link extensions}.
 	 *
-	 * @todo support returning an array of files (eg, for sourcemaps).
+	 * @todo support returning an array of files (ie. for css-in-js)
 	 */
-	onFile(context: Plugin.Context & { file: File }): File | Promise<File>;
+	onFile(context: Plugin.Context): VFile | Promise<VFile>;
 }

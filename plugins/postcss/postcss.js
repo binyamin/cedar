@@ -53,6 +53,7 @@ const plugin = (options) => ({
 		options.sourcemap ??= false; // Change to `true` once implemented
 		options.ignored ??= ['**/_*.{pcss,css}'];
 		options.plugins ??= [];
+		options.reporter ??= true;
 
 		if (options.reporter) options.plugins.push(reporter({ noIcon: true }));
 
@@ -64,21 +65,24 @@ const plugin = (options) => ({
 	},
 	async onFile(context) {
 		const isPartial = context.state.ignore.includes(
-			path.relative(context.global.src, context.file.path),
+			path.relative(context.global.dest, context.file.path),
 		);
 
 		if (isPartial) {
-			context.file.destination = false;
-			return context.file;
+			context.file.data.write = false;
+			return;
 		}
 
 		/** @type {{engine: import('postcss').Processor}} */
 		const { engine } = context.state;
 
 		try {
-			const result = await parseCSS(engine, context.file.contents, {
-				from: context.file.path,
-				to: context.file.destination,
+			const result = await parseCSS(engine, context.file.value, {
+				from: context.file.path.replace(
+					context.global.dest,
+					context.global.src,
+				),
+				to: context.file.path,
 				/* eslint-disable prettier/prettier */
 				...(options.sourcemap ?
 					{
@@ -89,7 +93,8 @@ const plugin = (options) => ({
 				: {}),
 				/* eslint-enable prettier/prettier */
 			});
-			context.file.contents = result.content;
+			context.file.value = result.content;
+			context.file.data.rename({ extname: '.css' });
 		} catch (error) {
 			/** @type {import("postcss").CssSyntaxError[''] | Error} */
 			const typedError = error;
@@ -99,8 +104,6 @@ const plugin = (options) => ({
 				throw error;
 			}
 		}
-
-		return context.file;
 	},
 });
 

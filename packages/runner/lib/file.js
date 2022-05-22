@@ -1,24 +1,34 @@
-import { promises as fs } from 'node:fs';
+import { read, write as writeVFile } from 'to-vfile';
+import { rename } from 'vfile-rename';
+
+import { mkdir } from './utils/fs.js';
+
+export { reporterPretty as report } from 'vfile-reporter-pretty';
 
 /**
- * Represents a file while it's passed between plugins.
- *
- * @typedef File
- * @property {string} path
- * @property {string} contents
- * @property {string|false} destination To disable writing,
- * set this to `false`
+ * @typedef {import("vfile").VFile} vFile
  */
 
 /**
  *
- * @param {string} path
- * @returns {Promise<File>}
+ * @param {import('to-vfile').Compatible} options
+ * @returns {Promise<vFile>}
  */
-export async function createFile(path) {
-	return {
-		path,
-		contents: await fs.readFile(path, 'utf-8'),
-		destination: undefined,
+export async function create(options) {
+	const file = await read(options, 'utf-8');
+	file.data.write = true;
+	file.data.rename = (renames) => {
+		rename(file, renames);
 	};
+
+	return file;
+}
+
+/**
+ *
+ * @param {vFile} file
+ */
+export async function write(file) {
+	await mkdir(file.dirname);
+	await writeVFile(file, 'utf-8');
 }

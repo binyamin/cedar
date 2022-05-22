@@ -25,6 +25,6 @@ export default createCommand('build')
 		console.group('Done');
 		console.timeEnd('Time');
 		console.log('Read: %f files', stats.length);
-		console.log('Wrote: %f files', stats.filter((f) => f.destination).length);
+		console.log('Wrote: %f files', stats.filter((f) => f.data.write).length);
 		console.groupEnd();
 	});

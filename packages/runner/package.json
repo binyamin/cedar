@@ -6,5 +6,11 @@
   "types": "./index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "to-vfile": "^7.2.3",
+    "vfile": "^5.3.2",
+    "vfile-rename": "^2.0.1",
+    "vfile-reporter-pretty": "^6.1.0"
   }
 }

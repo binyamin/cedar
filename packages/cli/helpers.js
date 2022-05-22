@@ -50,7 +50,7 @@ export function builder(config) {
 	 * Process and write files, and return their contents.
 	 *
 	 * @param {string[]} [paths] Only render the files at these paths.
-	 * @returns {Promise<import('@cedar/runner').File[]>} The output file objects
+	 * @returns {Promise<import('@cedar/runner').VFile[]>} The output file objects
 	 */
 	async function write(paths) {
 		const result = paths ? await process(paths) : await process();
