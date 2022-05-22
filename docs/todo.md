@@ -5,4 +5,5 @@
     - [ ] Imported CSS as separate file?
 - [x] Fix linting errors (from `xo`)
 - [ ] feature: supply a single file as input
-- [ ] external sourcemaps for CSS and JS
+- [x] external sourcemaps for CSS and JS
+- [ ] support css-in-js (problem is, how to add a file mid-pipeline)
