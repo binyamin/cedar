@@ -1,5 +1,6 @@
 import type nunjucks from '@cedar/plugin-nunjucks';
 import { type AcceptedPlugin } from 'postcss';
+
 import { type Config } from '../cli/types.js';
 
 type PartialDeep<T> = {
@@ -37,12 +38,12 @@ declare interface Options extends Omit<Config, 'src'> {
 	postcss: {
 		/**
 		 *
-		 * Set a folder for partials. Globs supported
-		 * (for directories). Relative to `config.src`.
+		 * Set paths which to parse and not write. Globs
+		 * supported. Useful for partials. Relative to `config.src`.
 		 *
-		 * @default undefined
+		 * For the default value, see "@cedar/plugin-postcss"
 		 */
-		partials: string;
+		ignored: string[];
 		/**
 		 *
 		 * Array of postcss plugins. Defaults to

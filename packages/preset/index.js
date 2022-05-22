@@ -18,6 +18,10 @@ async function preset(options) {
 	options.src ??= 'src';
 	options.dest ??= 'out';
 
+	options.nunjucks ??= {};
+	options.postcss ??= {};
+	options.postcss.plugins ??= [atImport(), csso()];
+
 	const data = {};
 
 	const njkIgnored = [];
@@ -47,15 +51,8 @@ async function preset(options) {
 				filters: options.nunjucks.filters ?? {},
 			}),
 			postcssPlugin({
-				plugins: options.postcss?.plugins ?? [atImport, csso],
-				/* eslint-disable prettier/prettier */
-				...(options.postcss?.partials
-					? {
-						ignored: [
-							path.join(options.postcss.partials, '**', '*.{pcss,css}'),
-						],
-					} : {}),
-				/* eslint-enable prettier/prettier */
+				plugins: options.postcss.plugins,
+				ignored: options.postcss?.ignored,
 			}),
 			...(options.plugins ?? []),
 		],
