@@ -7,6 +7,8 @@ import csso from 'postcss-csso';
 
 import getData from './get-data.js';
 
+export const postcssPlugins = [atImport, csso];
+
 /**
  *
  * @param {import('.').Options} options
