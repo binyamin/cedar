@@ -12,6 +12,6 @@
     "nunjucks": "^3.2.3"
   },
   "devDependencies": {
-    "@cedar/runner": "workspace:^0.1.0"
+    "@cedar/runner": "workspace:^0.2.0"
   }
 }
