@@ -96,7 +96,8 @@ class Runner {
 		}
 
 		// Note: Because we're using `const file` and not `let file`, we get
-		// a reference to the array item itself.
+		// a reference to the array item itself. This is signficant, because
+		// when we pass it to the user, we don't need them to pass it back.
 		for (const file of this.#files) {
 			file.data.rename({
 				path: file.path.replace(this.#config.src, this.#config.dest),

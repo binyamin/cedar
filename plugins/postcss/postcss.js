@@ -35,8 +35,8 @@ async function parseCSS(engine, css, options) {
 /**
  *
  * @param {object} options
- * @param {boolean} [options.sourcemap=true] Not yet implemented.
- * (Generate sourcemaps. Default is `true`)
+ * @param {boolean} [options.sourcemap=true] Whether to
+ * generate sourcemaps. Default is `true`.
  * @param {string[]} [options.ignored] Process these files,
  * but don't write anything. Useful for partials. Accepts
  * an array of globs. Defaults to any `.pcss` or `.css` file
@@ -50,7 +50,7 @@ const plugin = (options) => ({
 	name: 'postcss',
 	extensions: ['.css', '.pcss'],
 	async init(context) {
-		options.sourcemap ??= false; // Change to `true` once implemented
+		options.sourcemap ??= true;
 		options.ignored ??= ['**/_*.{pcss,css}'];
 		options.plugins ??= [];
 		options.reporter ??= true;
@@ -73,28 +73,29 @@ const plugin = (options) => ({
 			return;
 		}
 
+		context.file.data.rename({ extname: '.css' });
+
 		/** @type {{engine: import('postcss').Processor}} */
 		const { engine } = context.state;
 
 		try {
 			const result = await parseCSS(engine, context.file.value, {
-				from: context.file.path.replace(
-					context.global.dest,
-					context.global.src,
-				),
+				from: context.file.history[0],
 				to: context.file.path,
 				/* eslint-disable prettier/prettier */
 				...(options.sourcemap ?
 					{
 						map: {
+							prev: context.file.map ?? false,
 							inline: false,
+							sourcesContent: false,
 						},
 					}
 				: {}),
 				/* eslint-enable prettier/prettier */
 			});
 			context.file.value = result.content;
-			context.file.data.rename({ extname: '.css' });
+			context.file.map = result.map.toJSON();
 		} catch (error) {
 			/** @type {import("postcss").CssSyntaxError[''] | Error} */
 			const typedError = error;
