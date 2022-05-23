@@ -14,7 +14,14 @@
   },
   "devDependencies": {
     "debug": "^4.3.4",
-    "xo": "^0.48.0"
+    "xo": "^0.49.0"
   },
-  "packageManager": "pnpm@7.1.2"
+  "packageManager": "pnpm@7.1.2",
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "webpack"
+      ]
+    }
+  }
 }
