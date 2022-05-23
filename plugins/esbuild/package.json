@@ -11,6 +11,6 @@
     "esbuild": "^0.14.39"
   },
   "devDependencies": {
-    "@cedar/runner": "workspace:^0.1.0"
+    "@cedar/runner": "workspace:^0.2.0"
   }
 }
