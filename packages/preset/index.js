@@ -2,6 +2,8 @@ import path from 'node:path';
 
 import nunjucksPlugin from '@cedar/plugin-nunjucks';
 import postcssPlugin from '@cedar/plugin-postcss';
+import esbuildPlugin from '@cedar/plugin-esbuild';
+
 import atImport from 'postcss-import';
 import csso from 'postcss-csso';
 
@@ -21,6 +23,7 @@ async function preset(options) {
 	options.nunjucks ??= {};
 	options.postcss ??= {};
 	options.postcss.plugins ??= [atImport(), csso()];
+	options.esbuild ??= {};
 
 	const data = {};
 
@@ -54,6 +57,7 @@ async function preset(options) {
 				plugins: options.postcss.plugins,
 				ignored: options.postcss?.ignored,
 			}),
+			esbuildPlugin(options.esbuild),
 			...(options.plugins ?? []),
 		],
 	};

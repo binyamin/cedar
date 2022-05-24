@@ -1,4 +1,6 @@
-import type nunjucks from '@cedar/plugin-nunjucks';
+import nunjucks from '@cedar/plugin-nunjucks';
+import esbuild from '@cedar/plugin-esbuild';
+
 import { type AcceptedPlugin } from 'postcss';
 
 import { type Config } from '../cli/types.js';
@@ -51,6 +53,7 @@ declare interface Options extends Omit<Config, 'src'> {
 		 */
 		plugins: AcceptedPlugin[];
 	};
+	esbuild: esbuild.Options,
 }
 
 /**

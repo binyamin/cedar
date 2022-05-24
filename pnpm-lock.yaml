@@ -28,6 +28,7 @@ importers:
 
   packages/preset:
     specifiers:
+      '@cedar/plugin-esbuild': workspace:^0.1.0
       '@cedar/plugin-nunjucks': workspace:^0.2.0
       '@cedar/plugin-postcss': workspace:^0.1.0
       '@nodelib/fs.walk': ^1.2.8
@@ -36,6 +37,7 @@ importers:
       postcss-csso: ^6.0.0
       postcss-import: ^14.1.0
     dependencies:
+      '@cedar/plugin-esbuild': link:../../plugins/esbuild
       '@cedar/plugin-nunjucks': link:../../plugins/nunjucks
       '@cedar/plugin-postcss': link:../../plugins/postcss
       '@nodelib/fs.walk': 1.2.8
