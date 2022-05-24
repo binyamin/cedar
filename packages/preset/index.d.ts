@@ -53,7 +53,7 @@ declare interface Options extends Omit<Config, 'src'> {
 		 */
 		plugins: AcceptedPlugin[];
 	};
-	esbuild: esbuild.Options,
+	esbuild: esbuild.Options;
 }
 
 /**

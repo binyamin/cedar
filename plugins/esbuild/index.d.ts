@@ -6,7 +6,7 @@ declare namespace esbuildPlugin {
 		/**
 		 * Whether to generate sourcemaps. Ignored when
 		 * `options.esbuild` is set.
-		 * 
+		 *
 		 * @default
 		 * true
 		 */
