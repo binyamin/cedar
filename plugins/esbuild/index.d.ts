@@ -4,15 +4,37 @@ import { plugin } from '@cedar/runner';
 declare namespace esbuildPlugin {
 	interface Options {
 		/**
+		 *
 		 * Whether to generate sourcemaps. Ignored when
 		 * `options.esbuild` is set.
 		 *
-		 * @default
-		 * true
+		 * @default true
 		 */
 		sourcemaps?: boolean;
 
 		/**
+		 *
+		 * Whether to minify the source. Ignored when
+		 * `options.esbuild` is set.
+		 *
+		 * @default false
+		 */
+		minify?: boolean;
+
+		/**
+		 *
+		 * Whether to bundle the source. Ignored when
+		 * `options.esbuild` is set.
+		 *
+		 * @note When this is `true`, you must also set
+		 * `options.entryPoints`
+		 *
+		 * @default false
+		 */
+		bundle?: boolean;
+
+		/**
+		 *
 		 * Override the default esbuild options.
 		 *
 		 * @default
@@ -31,13 +53,13 @@ declare namespace esbuildPlugin {
 
 		/**
 		 *
-		 * When `esbuild.bundle` is `true`, this field is
-		 * required. It identifies which files were imported,
-		 * and should not be written to disk. It should be an
-		 * array of paths (strings), relative to `config.src.
+		 * Identifies which files were imported, and should
+		 * not be written to disk. Relative to `config.src`.
 		 *
-		 * @default
-		 * undefined
+		 * @note When `bundle` or `esbuild.bundle` is `true`,
+		 * this field is required.
+		 *
+		 * @default undefined
 		 */
 		entryPoints?: string[];
 	}

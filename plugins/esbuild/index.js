@@ -50,9 +50,13 @@ async function printMessages(errors, warnings) {
  */
 function esbuildPlugin(options = {}) {
 	options.sourcemaps ??= true;
+	options.minify ??= false;
+	options.bundle ??= false;
+
 	options.esbuild ??= {
 		format: 'esm',
-		minify: true,
+		minify: options.minify,
+		bundle: options.bundle,
 		treeShaking: true,
 		platform: 'browser',
 		sourcemap: options.sourcemaps ? 'linked' : false,
