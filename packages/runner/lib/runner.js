@@ -105,7 +105,11 @@ class Runner {
 
 			for (const plugin of this.#plugins) {
 				if (plugin.extensions.includes(file.extname)) {
-					debug.plugins('running plugin:%s on "%s"', plugin.name, file.path);
+					debug.plugins(
+						'running plugin:%s on "%s"',
+						plugin.name,
+						file.history[0],
+					);
 
 					const value = plugin.onFile({
 						global: this.#config,
