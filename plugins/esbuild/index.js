@@ -46,20 +46,7 @@ async function printMessages(errors, warnings) {
 }
 
 /**
- * Run esbuild on all JS files
- *
- * @param {object} options
- * @param {boolean} [options.sourcemaps=true] Whether to
- * generate sourcemaps. The default is `true`. Ignored when
- * `options.esbuild` is set.
- * @param {import('esbuild').BuildOptions} [options.esbuild={}]
- * Override the default esbuild options.
- * @param {string[]} options.entryPoints When `esbuild.bundle` is
- * `true`, this field is required. It identifies which files
- * were imported, and can be safely ignored. It should be an array
- * of paths (strings), relative to `config.src`.
- *
- * @returns {import('@cedar/runner').plugin}
+ * @type {import('.').default}
  */
 function esbuildPlugin(options = {}) {
 	options.sourcemaps ??= true;
@@ -109,9 +96,6 @@ function esbuildPlugin(options = {}) {
 				),
 				/* eslint-enable prettier/prettier */
 			});
-
-			// The same for every file
-			// log('cwd: %s', file.cwd);
 
 			const origin = path.join(file.cwd, file.history[0]);
 			try {
