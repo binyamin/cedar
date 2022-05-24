@@ -16,7 +16,7 @@ export { reporterPretty as report } from 'vfile-reporter-pretty';
  * @returns {Promise<vFile>}
  */
 export async function create(options) {
-	const file = await read(options, 'utf-8');
+	const file = await read(options, 'utf8');
 	file.data.write = true;
 	file.data.rename = (renames) => {
 		const newFile = rename(file, renames);
@@ -32,12 +32,12 @@ export async function create(options) {
  */
 export async function write(file) {
 	await mkdir(file.dirname);
-	await writeVFile(file, 'utf-8');
+	await writeVFile(file, 'utf8');
 	if (file.map) {
 		await writeFile(
 			path.resolve(file.cwd, file.path) + '.map',
 			JSON.stringify(file.map),
-			'utf-8',
+			'utf8',
 		);
 	}
 }

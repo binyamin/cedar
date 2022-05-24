@@ -1,13 +1,13 @@
-import type { vFile } from 'vfile';
+import { VFile } from 'vfile';
 import type { Options, Plugin } from './plugin.js';
 
 declare interface Result {
 	/**
 	 *
-	 * Array of {@link vFile} objects. Useful if you want to get the
+	 * Array of {@link VFile} objects. Useful if you want to get the
 	 * file's contents as a string.
 	 */
-	files: vFile[];
+	files: VFile[];
 
 	/**
 	 *
@@ -19,7 +19,7 @@ declare interface Result {
 export class Runner {
 	#config: Readonly<Options>;
 	#plugins: Plugin[];
-	#files: vFile[];
+	#files: VFile[];
 
 	constructor(options: Options);
 

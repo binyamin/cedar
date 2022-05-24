@@ -1,4 +1,4 @@
-import type { VFile } from 'vfile';
+import { VFile } from 'vfile';
 import { Renames } from 'vfile-rename';
 
 export interface Options {
@@ -42,7 +42,7 @@ declare namespace Plugin {
 		 * Use this property to share information between
 		 * `init` and `onFile`.
 		 */
-		state: Record<string, any>;
+		state: Record<string, unknown>;
 
 		/**
 		 *
@@ -53,7 +53,7 @@ declare namespace Plugin {
 		 * - To tell the processor not to write a file, set
 		 * the `data.write` field to `false`
 		 *
-		 * @note - Not present for the `onInit` method.
+		 * @note Not present for the `onInit` method.
 		 */
 		file: VFile;
 	}

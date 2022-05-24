@@ -6,7 +6,7 @@ declare namespace nunjucks {
 		target: unknown,
 		...args: unknown[],
 		kwargs?: Record<string, unknown>,
-	) => any | Promise<any>;
+	) => unknown | Promise<unknown>;
 
 	type EnvOptions = Pick<
 		ConfigureOptions,
