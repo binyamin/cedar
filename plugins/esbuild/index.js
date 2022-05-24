@@ -76,9 +76,11 @@ function esbuildPlugin(options = {}) {
 		extensions: ['.js', '.mjs', '.cjs', '.ts'],
 		init() {},
 		async onFile({ file, global }) {
-			const toWrite = options.entryPoints ?? [];
 			if (
-				toWrite.includes(path.relative(global.src, file.history[0])) === false
+				options.entryPoints &&
+				options.entryPoints.includes(
+					path.relative(global.src, file.history[0]),
+				) === false
 			) {
 				file.data.write = false;
 				return;
