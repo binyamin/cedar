@@ -20,7 +20,7 @@ export async function create(options) {
 	file.data.write = true;
 	file.data.rename = (renames) => {
 		const newFile = rename(file, renames);
-		file.map.file = newFile.basename;
+		if (file.map) file.map.file = newFile.basename;
 	};
 
 	return file;
