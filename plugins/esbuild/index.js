@@ -110,6 +110,7 @@ function esbuildPlugin(options = {}) {
 					logLevel: 'silent',
 					outfile: file.path,
 					write: false,
+					watch: false,
 				});
 
 				for (const outputFile of result.outputFiles.slice(0, 2)) {

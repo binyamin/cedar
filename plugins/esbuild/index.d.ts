@@ -24,7 +24,10 @@ declare namespace esbuildPlugin {
 		 * 	sourcesContent: false,
 		 * }
 		 */
-		esbuild?: Omit<BuildOptions, 'write' | 'outfile' | 'logLevel' | 'stdin'>;
+		esbuild?: Omit<
+			BuildOptions,
+			'write' | 'watch' | 'outfile' | 'logLevel' | 'stdin'
+		>;
 
 		/**
 		 *
