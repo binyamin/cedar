@@ -1,53 +1,49 @@
 import { EventEmitter } from 'node:events';
-import fs from 'node:fs';
+import * as fs from 'node:fs';
 import { RequestListener } from 'node:http';
 
 import TypedEventEmitter from 'typed-emitter';
 
-declare namespace server {
-	interface Options {
-		/**
-		 *
-		 * Serve this directory. Also, reload the browser when a change is detected.
-		 * The latter can be customized with {@link watchDir `watchDir`}.
-		 */
-		publicDir: string;
+export interface Options {
+	/**
+	 *
+	 * Serve this directory. Also, reload the browser when a change is detected.
+	 * The latter can be customized with {@link watchDir `watchDir`}.
+	 */
+	publicDir: string;
 
-		/**
-		 *
-		 * Reload the browser tab when a file within changes.
-		 * Defaults to the value of {@link publicDir `publicDir`}.
-		 *
-		 * @default this.publicDir
-		 */
-		watchDir?: string;
+	/**
+	 *
+	 * Reload the browser tab when a file within changes.
+	 * Defaults to the value of {@link publicDir `publicDir`}.
+	 *
+	 * @default this.publicDir
+	 */
+	watchDir?: string;
 
-		/**
-		 *
-		 * The port for the http server.
-		 *
-		 * @default 3000
-		 */
-		port?: number;
-	}
-
-	type EventMap = {
-		close: () => void | Promise<void>;
-		request: RequestListener;
-		change: (path: string, stats?: fs.Stats) => void | Promise<void>;
-	};
-
-	class Events extends (EventEmitter as new () => TypedEventEmitter<EventMap>) {}
+	/**
+	 *
+	 * The port for the http server.
+	 *
+	 * @default 3000
+	 */
+	port?: number;
 }
+
+declare class Events extends (EventEmitter as new () => TypedEventEmitter<{
+	close: () => void | Promise<void>;
+	request: RequestListener;
+	change: (path: string, stats?: fs.Stats) => void | Promise<void>;
+}>) {}
 
 declare class Server {
 	/**
 	 *
 	 * Add an event listener. Alias for `events.on`.
 	 */
-	on: server.Events['on'];
+	on: Events['on'];
 
-	constructor(options: server.Options);
+	constructor(options: Options);
 
 	/**
 	 *
@@ -61,7 +57,7 @@ declare class Server {
 	 *
 	 * @since 0.2.0
 	 */
-	get events(): server.Events;
+	get events(): Events;
 
 	start(): Promise<void>;
 
@@ -74,12 +70,14 @@ declare class Server {
 	close(): Promise<void>;
 }
 
+export default Server;
+
 /**
  *
  * Creates a new server, starts it (by default), and
  * returns it.
  */
-declare function createServer(
+export function createServer(
 	/**
 	 * Folder to serve
 	 */
@@ -92,6 +90,3 @@ declare function createServer(
 		start?: boolean;
 	},
 ): Promise<Server>;
-
-export { createServer };
-export default Server;
