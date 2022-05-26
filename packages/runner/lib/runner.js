@@ -31,7 +31,7 @@ async function writeAll(files) {
 	}
 
 	await Promise.all(results);
-	console.log(fileUtils.report(files));
+	fileUtils.report(files);
 }
 
 class Runner {

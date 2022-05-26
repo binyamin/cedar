@@ -1,14 +1,25 @@
 import path from 'node:path';
+
 import { read, write as writeVFile } from 'to-vfile';
 import { rename } from 'vfile-rename';
+import { reporterPretty } from 'vfile-reporter-pretty';
 
 import { mkdir, writeFile } from './utils/fs.js';
-
-export { reporterPretty as report } from 'vfile-reporter-pretty';
 
 /**
  * @typedef {import("vfile").VFile} vFile
  */
+
+/**
+ *
+ * @param {vFile[]} vfiles
+ */
+export function report(vfiles) {
+	const output = reporterPretty(vfiles);
+	if (output) {
+		console.log(output);
+	}
+}
 
 /**
  *

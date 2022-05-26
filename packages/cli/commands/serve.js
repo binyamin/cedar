@@ -53,7 +53,7 @@ export default createCommand('serve')
 			logCount(filepath);
 
 			const f = await build(filepath);
-			filepath = f[0].destination;
+			filepath = f[0].path;
 			server.reload(filepath);
 		});
 
