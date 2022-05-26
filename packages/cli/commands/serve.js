@@ -1,8 +1,11 @@
+/// <reference path="../env.d.ts" />
+import { env } from 'node:process';
+
 import { createCommand } from 'commander';
 import logUpdate from 'log-update';
 import Server from '@cedar/server';
 
-import { builder } from '../helpers.js';
+import { builder, loadConfig } from '../helpers.js';
 
 function logCount(file) {
 	logCount.file ??= file;
@@ -24,7 +27,13 @@ export default createCommand('serve')
 	.description('Serve the given folder')
 	.option('-p, --port', 'Port number', 3000)
 	.action(async function (input, options, program) {
-		const { output, config } = program.optsWithGlobals();
+		const { output, config: configFile } = program.optsWithGlobals();
+
+		// `env` must be set before the config is loaded,
+		// so configs and presets have access to the values
+		env.CEDAR_MODE = 'serve';
+		const config = await loadConfig(configFile);
+
 		console.log(`Serving "${config?.src || input}" on port ${options.port}...`);
 
 		const build = builder(

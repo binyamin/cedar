@@ -1,4 +1,6 @@
+/// <reference path="../cli/env.d.ts" />
 import path from 'node:path';
+import { env } from 'node:process';
 
 import nunjucksPlugin from '@cedar/plugin-nunjucks';
 import postcssPlugin from '@cedar/plugin-postcss';
@@ -25,7 +27,24 @@ async function preset(options) {
 	options.postcss.plugins ??= [atImport(), csso()];
 	options.esbuild ??= {};
 
-	const data = {};
+	const data = {
+		cedar: {
+			livereload:
+				'<script defer src="http://localhost:35729/livereload.js"></script>',
+			mode: env.CEDAR_MODE,
+			env: 'dev',
+		},
+	};
+
+	if (env.NODE_ENV) {
+		if (/^dev(elopment)$/i.test(env.NODE_ENV)) {
+			data.cedar.env = 'dev';
+		} else if (/^prod(uction)$/i.test(env.NODE_ENV)) {
+			data.cedar.env = 'prod';
+		} else {
+			data.cedar.env = env.NODE_ENV;
+		}
+	}
 
 	const njkIgnored = [];
 

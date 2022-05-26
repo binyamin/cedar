@@ -1,12 +1,21 @@
+/// <reference path="../env.d.ts" />
+import { env } from 'node:process';
+
 import { createCommand } from 'commander';
 
-import { builder } from '../helpers.js';
+import { builder, loadConfig } from '../helpers.js';
 
 export default createCommand('build')
 	.argument('<input>')
 	.description('Build the site')
 	.action(async (input, _options, program) => {
-		const { output, config } = program.optsWithGlobals();
+		const { output, config: configFile } = program.optsWithGlobals();
+
+		// `env` must be set before the config is loaded,
+		// so configs and presets have access to the values
+		env.CEDAR_MODE = 'build';
+		const config = await loadConfig(configFile);
+
 		const build = builder(
 			config || {
 				src: input,

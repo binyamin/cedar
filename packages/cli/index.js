@@ -2,7 +2,7 @@ import { program } from 'commander';
 import debug from 'debug';
 
 import * as commands from './commands/index.js';
-import { loadConfig, parseOption } from './helpers.js';
+import { parseOption } from './helpers.js';
 
 program
 	.name('cedar')
@@ -24,11 +24,6 @@ program
 
 program.hook('preAction', async (_cmd, _action) => {
 	if (program.getOptionValue('debug')) debug.enable('cedar:*');
-
-	program.setOptionValue(
-		'config',
-		await loadConfig(program.getOptionValue('config')),
-	);
 });
 
 program.addCommand(commands.build);
