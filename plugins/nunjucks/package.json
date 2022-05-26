@@ -8,8 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "globby": "^13.1.1",
-    "nunjucks": "^3.2.3"
+    "@binyamin/njk": "github:binyamin/nunjucks-cli",
+    "@types/nunjucks": "^3.2.1",
+    "globby": "^13.1.1"
   },
   "devDependencies": {
     "@cedar/runner": "workspace:^0.2.0"

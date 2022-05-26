@@ -1,4 +1,4 @@
-import { ConfigureOptions, Environment } from 'nunjucks';
+import { ConfigureOptions } from 'nunjucks';
 import type { plugin } from '@cedar/runner';
 
 declare namespace nunjucks {
@@ -80,6 +80,18 @@ declare namespace nunjucks {
 
 		/**
 		 *
+		 * Paths to JSON or YAML files, for global data. May
+		 * be globs. Relative to the current directory, not
+		 * `config.src`.
+		 *
+		 * @todo
+		 *
+		 * @default []
+		 */
+		dataFiles?: string[];
+
+		/**
+		 *
 		 * Configure nunjucks. Only a subset of the
 		 * original options is available.
 		 *
@@ -89,10 +101,6 @@ declare namespace nunjucks {
 			[K in keyof EnvOptions]: EnvOptions[K];
 		};
 	}
-}
-
-export class Engine extends Environment {
-	constructor(options: { dirs: string | string[] });
 }
 
 /**

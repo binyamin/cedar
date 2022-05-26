@@ -1,20 +1,8 @@
 import path from 'node:path';
 import { isAsyncFunction } from 'node:util/types';
 
+import { Nunjucks as Engine } from '@binyamin/njk';
 import { globby } from 'globby';
-import nunjucks from 'nunjucks';
-
-class Engine extends nunjucks.Environment {
-	/**
-	 *
-	 * @param {object} options
-	 * @param {string | string[]} options.dirs
-	 */
-	constructor(options) {
-		const loader = new nunjucks.FileSystemLoader(options.dirs);
-		super(loader);
-	}
-}
 
 /**
  * @param {import("./nunjucks").default.Options} options
@@ -30,9 +18,7 @@ function plugin(options) {
 		name: 'nunjucks',
 		extensions: options.extensions,
 		async init(context) {
-			const engine = new Engine({
-				dirs: context.global.src,
-			});
+			const engine = new Engine(context.global.src);
 
 			for (const [key, value] of Object.entries(options.data)) {
 				engine.addGlobal(key, value);
@@ -85,5 +71,4 @@ function plugin(options) {
 	};
 }
 
-export { Engine };
 export default plugin;
