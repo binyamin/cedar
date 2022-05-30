@@ -72,10 +72,7 @@ async function preset(options) {
 				...(njkIgnored.length > 0 ? { ignored: njkIgnored } : {}),
 				filters: options.nunjucks.filters ?? {},
 			}),
-			postcssPlugin({
-				plugins: options.postcss.plugins,
-				ignored: options.postcss?.ignored,
-			}),
+			postcssPlugin(options.postcss),
 			esbuildPlugin(options.esbuild),
 			...(options.plugins ?? []),
 		],

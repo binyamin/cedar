@@ -5,7 +5,7 @@
   "bin": "index.js",
   "dependencies": {
     "@cedar/plugin-nunjucks": "workspace:^0.2.0",
-    "@cedar/plugin-postcss": "workspace:^0.1.0",
+    "@cedar/plugin-postcss": "workspace:^0.2.0",
     "@cedar/runner": "workspace:^0.2.0",
     "@cedar/server": "workspace:^0.2.0",
     "commander": "^9.1.0",

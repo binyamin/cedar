@@ -1,4 +1,5 @@
 import nunjucks from '@cedar/plugin-nunjucks';
+import postcss from '@cedar/plugin-postcss';
 import esbuild from '@cedar/plugin-esbuild';
 
 import { type AcceptedPlugin } from 'postcss';
@@ -37,15 +38,7 @@ declare interface Options extends Omit<Config, 'src'> {
 		 */
 		filters: Record<string, nunjucks.Filter>;
 	};
-	postcss: {
-		/**
-		 *
-		 * Set paths which to parse and not write. Globs
-		 * supported. Useful for partials. Relative to `config.src`.
-		 *
-		 * For the default value, see "@cedar/plugin-postcss"
-		 */
-		ignored: string[];
+	postcss: postcss.Options & {
 		/**
 		 *
 		 * Array of postcss plugins. Defaults to

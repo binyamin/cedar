@@ -7,7 +7,7 @@
   "dependencies": {
     "@cedar/plugin-esbuild": "workspace:^0.1.0",
     "@cedar/plugin-nunjucks": "workspace:^0.2.0",
-    "@cedar/plugin-postcss": "workspace:^0.1.0",
+    "@cedar/plugin-postcss": "workspace:^0.2.0",
     "@nodelib/fs.walk": "^1.2.8",
     "dot-prop": "^7.2.0",
     "postcss-csso": "^6.0.0",
