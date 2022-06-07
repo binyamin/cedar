@@ -60,7 +60,7 @@ function esbuildPlugin(options = {}) {
 		treeShaking: true,
 		platform: 'browser',
 		sourcemap: options.sourcemaps ? 'linked' : false,
-		sourcesContent: false,
+		sourcesContent: true,
 	};
 
 	/* eslint-disable prettier/prettier */

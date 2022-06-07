@@ -48,16 +48,6 @@ function plugin(options) {
 				return;
 			}
 
-			/** @type {Engine} */
-			const engine = context.state.engine;
-
-			file.value = await new Promise((resolve, reject) => {
-				engine.renderString(file.value, {}, (error, response) => {
-					if (error) reject(error);
-					resolve(response);
-				});
-			});
-
 			const ext = options.extensions
 				.filter((ext) => file.extname === ext)
 				.sort((a, b) => a.length - b.length)[0];
@@ -66,6 +56,23 @@ function plugin(options) {
 			if (!dest.includes('.')) dest += '.html';
 			file.data.rename({
 				basename: dest,
+			});
+
+			/** @type {Engine} */
+			const engine = context.state.engine;
+
+			const localData = {
+				page: {
+					inputPath: path.relative(context.global.src, file.history[0]),
+					outputPath: path.relative(context.global.dest, file.path),
+				},
+			};
+
+			file.value = await new Promise((resolve, reject) => {
+				engine.renderString(file.value, localData, (error, response) => {
+					if (error) reject(error);
+					resolve(response);
+				});
 			});
 		},
 	};

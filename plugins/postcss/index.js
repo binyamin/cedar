@@ -81,7 +81,7 @@ function plugin(options) {
 							map: {
 								prev: context.file.map ?? false,
 								inline: false,
-								sourcesContent: false,
+								sourcesContent: true,
 							},
 						}
 						: {}),
