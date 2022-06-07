@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { program } from 'commander';
 import debug from 'debug';
 
@@ -6,7 +8,7 @@ import { parseOption } from './helpers.js';
 
 program
 	.name('cedar')
-	.version('0.1.0', '-v, --version')
+	.version('0.1.1', '-v, --version')
 	.description('A set of tools for building static sites')
 	.showSuggestionAfterError(true)
 	.option('-d, --debug', 'print debugging information', false)
@@ -22,7 +24,7 @@ program
 		parseOption,
 	);
 
-program.hook('preAction', async (_cmd, _action) => {
+program.hook('preAction', (_cmd, _action) => {
 	if (program.getOptionValue('debug')) debug.enable('cedar:*');
 });
 
