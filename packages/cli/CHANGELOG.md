@@ -2,7 +2,7 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 0.1.2 - 2022-06-07
 
 ### Changed
 - Specify that the program is compatible with Node.js v16.8.0 and greater (1649721)
