@@ -1,3 +1,11 @@
 {
-	"bracketSpacing": true
+	"bracketSpacing": true,
+	"overrides": [
+		{
+			"files": "**/*.{yml,yaml}",
+			"options": {
+				"useTabs": false
+			}
+		}
+	]
 }
