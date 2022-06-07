@@ -1,7 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
-import createRunner from '@binyamincedar-runner';
+import createRunner from '@binyamin/cedar-runner';
 import nunjucksPlugin from '@binyamin/cedar-nunjucks';
 import postcssPlugin from '@binyamin/cedar-postcss';
 
