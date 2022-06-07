@@ -37,9 +37,9 @@ async function preset(options) {
 	};
 
 	if (env.NODE_ENV) {
-		if (/^dev(elopment)$/i.test(env.NODE_ENV)) {
+		if (/^dev(elopment)?$/i.test(env.NODE_ENV)) {
 			data.cedar.env = 'dev';
-		} else if (/^prod(uction)$/i.test(env.NODE_ENV)) {
+		} else if (/^prod(uction)?$/i.test(env.NODE_ENV)) {
 			data.cedar.env = 'prod';
 		} else {
 			data.cedar.env = env.NODE_ENV;
