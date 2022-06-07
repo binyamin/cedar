@@ -1,11 +1,13 @@
 {
-  "name": "@cedar/plugin-nunjucks",
+  "name": "@binyamin/cedar-nunjucks",
   "version": "0.2.0",
   "type": "module",
   "main": "nunjucks.js",
   "types": "./nunjucks.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "repository": {
+    "url": "https://github.com/binyamin/cedar",
+    "type": "git",
+    "directory": "plugins/nunjucks"
   },
   "dependencies": {
     "@binyamin/njk": "github:binyamin/nunjucks-cli",
@@ -13,6 +15,6 @@
     "globby": "^13.1.1"
   },
   "devDependencies": {
-    "@cedar/runner": "workspace:^0.2.0"
+    "@binyamin/cedar-runner": "workspace:*"
   }
 }

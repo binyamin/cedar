@@ -3,7 +3,7 @@ import { env } from 'node:process';
 
 import { createCommand } from 'commander';
 import logUpdate from 'log-update';
-import Server from '@cedar/server';
+import Server from '@binyamin/cedar-server';
 
 import { builder, loadConfig } from '../helpers.js';
 

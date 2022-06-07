@@ -1,14 +1,22 @@
 {
-  "name": "cedar",
+  "name": "@binyamin/cedar",
   "version": "0.1.0",
   "type": "module",
-  "bin": "index.js",
+  "bin": {
+    "cedar": "index.js"
+  },
+  "repository": {
+    "url": "https://github.com/binyamin/cedar",
+    "type": "git",
+    "directory": "packages/cli"
+  },
   "dependencies": {
-    "@cedar/plugin-nunjucks": "workspace:^0.2.0",
-    "@cedar/plugin-postcss": "workspace:^0.2.0",
-    "@cedar/runner": "workspace:^0.2.0",
-    "@cedar/server": "workspace:^0.2.0",
+    "@binyamin/cedar-nunjucks": "workspace:*",
+    "@binyamin/cedar-postcss": "workspace:*",
+    "@binyamin/cedar-runner": "workspace:*",
+    "@binyamin/cedar-server": "workspace:*",
     "commander": "^9.1.0",
+    "debug": "^4.3.4",
     "log-update": "^5.0.0"
   }
 }

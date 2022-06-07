@@ -2,9 +2,9 @@
 import path from 'node:path';
 import { env } from 'node:process';
 
-import nunjucksPlugin from '@cedar/plugin-nunjucks';
-import postcssPlugin from '@cedar/plugin-postcss';
-import esbuildPlugin from '@cedar/plugin-esbuild';
+import nunjucksPlugin from '@binyamin/cedar-nunjucks';
+import postcssPlugin from '@binyamin/cedar-postcss';
+import esbuildPlugin from '@binyamin/cedar-esbuild';
 
 import atImport from 'postcss-import';
 import csso from 'postcss-csso';

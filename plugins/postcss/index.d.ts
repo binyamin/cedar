@@ -1,4 +1,4 @@
-import { plugin } from '@cedar/runner';
+import { plugin } from '@binyamin/cedar-runner';
 import * as postcss from 'postcss';
 
 declare namespace postcssPlugin {

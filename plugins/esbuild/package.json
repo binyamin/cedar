@@ -1,9 +1,14 @@
 {
-  "name": "@cedar/plugin-esbuild",
+  "name": "@binyamin/cedar-esbuild",
   "version": "0.1.0",
   "type": "module",
   "main": "index.js",
   "types": "./index.d.ts",
+  "repository": {
+    "url": "https://github.com/binyamin/cedar",
+    "type": "git",
+    "directory": "plugins/esbuild"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +17,6 @@
     "esbuild": "^0.14.39"
   },
   "devDependencies": {
-    "@cedar/runner": "workspace:^0.2.0"
+    "@binyamin/cedar-runner": "workspace:*"
   }
 }

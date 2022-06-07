@@ -1,5 +1,5 @@
 import { ConfigureOptions } from 'nunjucks';
-import type { plugin } from '@cedar/runner';
+import type { plugin } from '@binyamin/cedar-runner';
 
 declare namespace nunjucks {
 	type Filter = (

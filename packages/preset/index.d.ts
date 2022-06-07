@@ -1,6 +1,6 @@
-import nunjucks from '@cedar/plugin-nunjucks';
-import postcss from '@cedar/plugin-postcss';
-import esbuild from '@cedar/plugin-esbuild';
+import nunjucks from '@binyamin/cedar-nunjucks';
+import postcss from '@binyamin/cedar-postcss';
+import esbuild from '@binyamin/cedar-esbuild';
 
 import { type AcceptedPlugin } from 'postcss';
 

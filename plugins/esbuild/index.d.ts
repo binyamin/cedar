@@ -1,5 +1,5 @@
 import { BuildOptions } from 'esbuild';
-import { plugin } from '@cedar/runner';
+import { plugin } from '@binyamin/cedar-runner';
 
 declare namespace esbuildPlugin {
 	interface Options {

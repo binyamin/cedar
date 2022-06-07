@@ -1,9 +1,9 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
-import createRunner from '@cedar/runner';
-import nunjucksPlugin from '@cedar/plugin-nunjucks';
-import postcssPlugin from '@cedar/plugin-postcss';
+import createRunner from '@binyamincedar-runner';
+import nunjucksPlugin from '@binyamin/cedar-nunjucks';
+import postcssPlugin from '@binyamin/cedar-postcss';
 
 /**
  *

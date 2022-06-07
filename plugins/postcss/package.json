@@ -1,11 +1,13 @@
 {
-  "name": "@cedar/plugin-postcss",
+  "name": "@binyamin/cedar-postcss",
   "version": "0.2.0",
   "type": "module",
   "main": "index.js",
   "types": "./index.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "repository": {
+    "url": "https://github.com/binyamin/cedar",
+    "type": "git",
+    "directory": "plugins/postcss"
   },
   "dependencies": {
     "globby": "^13.1.1",
@@ -13,6 +15,6 @@
     "postcss-reporter": "^7.0.5"
   },
   "devDependencies": {
-    "@cedar/runner": "workspace:^0.2.0"
+    "@binyamin/cedar-runner": "workspace:*"
   }
 }
