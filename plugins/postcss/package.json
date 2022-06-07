@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "globby": "^13.1.1",
-    "postcss": "^8.4.12",
+    "postcss": "^8.4.14",
     "postcss-reporter": "^7.0.5"
   },
   "devDependencies": {

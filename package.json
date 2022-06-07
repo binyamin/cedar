@@ -6,7 +6,7 @@
   "author": "Binyamin Aron Green (https://binyam.in/)",
   "license": "MIT",
   "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com"
   },
   "workspaces": [
     "plugins/*",
@@ -16,7 +16,7 @@
     "lint": "xo packages/ plugins/"
   },
   "devDependencies": {
-    "@types/node": "^16.11.36",
+    "@types/node": "^16.11.39",
     "debug": "^4.3.4",
     "xo": "^0.49.0"
   },

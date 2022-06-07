@@ -19,6 +19,6 @@
     "postcss-import": "^14.1.0"
   },
   "devDependencies": {
-    "postcss": "^8.4.12"
+    "postcss": "^8.4.14"
   }
 }

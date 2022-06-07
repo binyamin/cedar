@@ -18,8 +18,8 @@
     "@binyamin/cedar-postcss": "workspace:*",
     "@binyamin/cedar-runner": "workspace:*",
     "@binyamin/cedar-server": "workspace:*",
-    "commander": "^9.1.0",
+    "commander": "^9.3.0",
     "debug": "^4.3.4",
-    "log-update": "^5.0.0"
+    "log-update": "^5.0.1"
   }
 }
