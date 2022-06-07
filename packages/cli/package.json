@@ -1,6 +1,6 @@
 {
   "name": "@binyamin/cedar",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "bin": {
     "cedar": "index.js"
