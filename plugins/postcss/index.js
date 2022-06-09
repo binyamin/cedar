@@ -47,7 +47,9 @@ function plugin(options) {
 		name: 'postcss',
 		extensions: options.extensions.map((ext) => '.' + ext),
 		async init(context) {
-			if (options.reporter) options.plugins.push(reporter({ noIcon: true }));
+			if (options.reporter) {
+				options.plugins.push(reporter({ noIcon: true }));
+			}
 
 			context.state.engine = postcss(options.plugins);
 
@@ -93,7 +95,10 @@ function plugin(options) {
 				/** @type {import("postcss").CssSyntaxError[''] | Error} */
 				const typedError = error;
 				if (typedError.name === 'CssSyntaxError') {
-					console.error(typedError.message, typedError.showSourceCode());
+					console.error(
+						typedError.message,
+						typedError.showSourceCode(),
+					);
 				} else {
 					throw error;
 				}

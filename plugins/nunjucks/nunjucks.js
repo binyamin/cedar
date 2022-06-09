@@ -58,21 +58,28 @@ function plugin(options) {
 				basename: dest,
 			});
 
-			/** @type {Engine} */
-			const engine = context.state.engine;
+			/** @type {{ engine: Engine}} */
+			const { engine } = context.state;
 
 			const localData = {
 				page: {
-					inputPath: path.relative(context.global.src, file.history[0]),
+					inputPath: path.relative(
+						context.global.src,
+						file.history[0],
+					),
 					outputPath: path.relative(context.global.dest, file.path),
 				},
 			};
 
 			file.value = await new Promise((resolve, reject) => {
-				engine.renderString(file.value, localData, (error, response) => {
-					if (error) reject(error);
-					resolve(response);
-				});
+				engine.renderString(
+					file.value,
+					localData,
+					(error, response) => {
+						if (error) reject(error);
+						resolve(response);
+					},
+				);
 			});
 		},
 	};

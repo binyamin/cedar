@@ -18,13 +18,11 @@ class Server {
 	 * @param {import(".").Options} options
 	 */
 	constructor(options) {
-		this.#options = Object.assign(
-			{
-				watchDir: options.publicDir,
-				port: 3000,
-			},
-			options,
-		);
+		this.#options = {
+			watchDir: options.publicDir,
+			port: 3000,
+			...options,
+		};
 
 		this.#events = new EventEmitter({
 			captureRejections: true,

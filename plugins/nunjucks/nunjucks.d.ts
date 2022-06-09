@@ -4,13 +4,21 @@ import type { plugin } from '@binyamin/cedar-runner';
 declare namespace nunjucks {
 	type Filter = (
 		target: unknown,
+		// @ts-expect-error This is how Nunjucks filters
+		// are defined. Our definition is invalid, b/c you
+		// can't use the rest parameter. But it's the best
+		// way to provide types for their unusual syntax.
 		...args: unknown[],
 		kwargs?: Record<string, unknown>,
 	) => unknown;
 
 	type EnvOptions = Pick<
 		ConfigureOptions,
-		'autoescape' | 'lstripBlocks' | 'tags' | 'trimBlocks' | 'throwOnUndefined'
+		| 'autoescape'
+		| 'lstripBlocks'
+		| 'tags'
+		| 'trimBlocks'
+		| 'throwOnUndefined'
 	>;
 
 	export interface Options {

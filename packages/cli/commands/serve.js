@@ -34,7 +34,9 @@ export default createCommand('serve')
 		env.CEDAR_MODE = 'serve';
 		const config = await loadConfig(configFile);
 
-		console.log(`Serving "${config?.src || input}" on port ${options.port}...`);
+		console.log(
+			`Serving "${config?.src || input}" on port ${options.port}...`,
+		);
 
 		const build = builder(
 			config || {

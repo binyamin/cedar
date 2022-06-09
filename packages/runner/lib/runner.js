@@ -83,7 +83,9 @@ class Runner {
 
 		if (paths) {
 			if (Array.isArray(paths)) {
-				this.#files = await Promise.all(paths.map((p) => fileUtils.create(p)));
+				this.#files = await Promise.all(
+					paths.map((p) => fileUtils.create(p)),
+				);
 			} else {
 				this.#files = [await fileUtils.create(paths)];
 			}
