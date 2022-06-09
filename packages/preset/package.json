@@ -19,6 +19,7 @@
     "postcss-import": "^14.1.0"
   },
   "devDependencies": {
+    "@binyamin/cedar": "workspace:*",
     "postcss": "^8.4.14"
   }
 }

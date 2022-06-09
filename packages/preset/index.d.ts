@@ -4,7 +4,7 @@ import esbuild from '@binyamin/cedar-esbuild';
 
 import { type AcceptedPlugin } from 'postcss';
 
-import { type Config } from '../cli/types.js';
+import { type Config } from '@binyamin/cedar/types.js';
 
 type PartialDeep<T> = {
 	[K in keyof T]?: T[K] extends Record<string, unknown>

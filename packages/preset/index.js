@@ -11,12 +11,12 @@ import csso from 'postcss-csso';
 
 import getData from './get-data.js';
 
-export const postcssPlugins = [atImport, csso];
+export const postcssPlugins = { atImport, csso };
 
 /**
  *
  * @param {import('.').Options} options
- * @returns {import("../cli/types").Config}
+ * @returns {import("@binyamin/cedar/types").Config}
  */
 async function preset(options) {
 	options.src ??= 'src';
