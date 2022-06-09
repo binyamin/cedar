@@ -2,6 +2,13 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+
+## Unreleased
+
+### Fixed
+- This program is compatible with _all_ Node.js v16 releases
+
+
 ## 0.1.2 - 2022-06-07
 
 ### Changed

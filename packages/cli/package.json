@@ -7,7 +7,7 @@
     "cedar": "index.js"
   },
   "engines": {
-    "node": ">=16.8"
+    "node": ">=16"
   },
   "repository": {
     "url": "https://github.com/binyamin/cedar",
